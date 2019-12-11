@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">VirtaAndroidBuddy</string>
+    <string name="error_password_required">Password required</string>
+    <string name="error_login_required">Login required</string>
+    <string name="btn_text_login">Login</string>
+    <string name="hint_login">login</string>
+    <string name="hint_password">password</string>
+    <string name="base_url">https://virtonomica.ru/</string>
+    <string name="error__create_company_before_login">Before login create company via web site, please.</string>
+</resources>
