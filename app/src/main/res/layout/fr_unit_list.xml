@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".UnitListActivity">
+    tools:context=".ui.unitlist.UnitListFragment">
 
     <ListView
         android:id="@+id/lv_units"

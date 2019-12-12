@@ -1,0 +1,128 @@
+package com.virtaandroidbuddy.ui.login;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.virtaandroidbuddy.R;
+import com.virtaandroidbuddy.api.ApiUtils;
+import com.virtaandroidbuddy.api.VirtonomicaApi;
+import com.virtaandroidbuddy.api.model.Company;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+
+public class LoginActivity extends AppCompatActivity {
+
+    private EditText mLoginEd;
+    private EditText mPasswordEd;
+    private Spinner mRealmSp;
+    private Button mLoginBtn;
+    private TextView mErrorTv;
+
+    final List<String> realms = Arrays.asList("vera", "olga", "anna", "lien", "mary", "nika", "fast");
+
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(final View view) {
+            final String login = mLoginEd.getText().toString();
+            final String password = mPasswordEd.getText().toString();
+            if (login.isEmpty()) {
+                mErrorTv.setText(getString(R.string.error_login_required));
+            } else if (password.isEmpty()) {
+                mErrorTv.setText(getString(R.string.error_password_required));
+            } else {
+                final String realm = realms.get((int) mRealmSp.getSelectedItemId());
+                try {
+                    final OkHttpClient client = ApiUtils.getClient(view.getContext());
+
+                    ApiUtils.loginUser(client, getString(R.string.base_url), login, password, realm).enqueue(new okhttp3.Callback() {
+                        @Override
+                        public void onFailure(okhttp3.Call call, IOException e) {
+                            Log.d("VirtonomicaApi", e.toString());
+                            mErrorTv.setText(e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                            final VirtonomicaApi api = ApiUtils.getApi(client, getString(R.string.base_url));
+                            api.getCompanyInfo(realm).enqueue(new Callback<Company>() {
+                                @Override
+                                public void onResponse(Call<Company> call, Response<Company> response) {
+                                    mErrorTv.setText("");
+                                    finish();
+                                }
+
+                                @Override
+                                public void onFailure(Call<Company> call, Throwable t) {
+                                    Log.d("VirtonomicaApi", t.toString());
+                                    mErrorTv.setText(t.toString());
+                                }
+                            });
+                        }
+                    });
+
+                } catch (Exception e) {
+                    Log.d("VirtonomicaApi", e.toString());
+                    mErrorTv.setText(getString(R.string.error__create_company_before_login));
+                }
+            }
+        }
+    };
+    private final AdapterView.OnItemSelectedListener mOnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            ApiUtils.setRealm(parent.getContext(), realms.get((int) id));
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+            ApiUtils.setRealm(parent.getContext(), realms.get(0));
+        }
+    };
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ac_login);
+
+        ApiUtils.setCookies(this, null);
+
+        mLoginEd = findViewById(R.id.ed_login);
+        mPasswordEd = findViewById(R.id.ed_password);
+        mRealmSp = findViewById(R.id.sp_realm);
+        mLoginBtn = findViewById(R.id.btn_login);
+        mErrorTv = findViewById(R.id.tv_error);
+
+        final ArrayAdapter<String> realms_adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, realms);
+        mRealmSp.setAdapter(realms_adapter);
+        mRealmSp.setOnItemSelectedListener(mOnItemSelectedListener);
+
+        final String prevRealm = ApiUtils.getRealm(this);
+        if (prevRealm != null) {
+            mRealmSp.setSelection(realms.indexOf(prevRealm));
+        }
+        mLoginBtn.setOnClickListener(mOnClickListener);
+
+    }
+
+}

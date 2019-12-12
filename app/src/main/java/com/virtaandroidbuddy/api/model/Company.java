@@ -1,59 +1,51 @@
-package com.virtaandroidbuddy.model;
+package com.virtaandroidbuddy.api.model;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-@Entity
 public class Company implements Serializable {
 
-    @PrimaryKey
-    @ColumnInfo(name = "id")
     @SerializedName("id")
     private String mId;
 
-    @ColumnInfo(name = "name")
     @SerializedName("name")
     private String mName;
 
-    @ColumnInfo(name = "president_user_id")
     @SerializedName("president_user_id")
     private String mPresidentUserId;
 
-    public String getmId() {
+    public String getId() {
         return mId;
     }
 
-    public void setmId(String mId) {
+    public void setId(String mId) {
         this.mId = mId;
     }
 
-    public String getmName() {
+    public String getName() {
         return mName;
     }
 
-    public void setmName(String mName) {
+    public void setName(String mName) {
         this.mName = mName;
     }
 
-    public String getmPresidentUserId() {
+    public String getPresidentUserId() {
         return mPresidentUserId;
     }
 
-    public void setmPresidentUserId(String mPresidentUserId) {
+    public void setPresidentUserId(String mPresidentUserId) {
         this.mPresidentUserId = mPresidentUserId;
     }
 
     @Override
     public String toString() {
         return "Company{" +
-                "mId='" + mId + '\'' +
-                ", mName='" + mName + '\'' +
-                ", mPresidentUserId='" + mPresidentUserId + '\'' +
+                "id='" + mId + '\'' +
+                ", name='" + mName + '\'' +
+                ", presidentUserId='" + mPresidentUserId + '\'' +
                 '}';
     }
 }

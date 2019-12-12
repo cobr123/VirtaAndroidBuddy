@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import okhttp3.Call;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -19,6 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiUtils {
     static private OkHttpClient client = null;
     static private Retrofit retrofit = null;
+    static private VirtonomicaApi api = null;
 
     public static OkHttpClient getClient(Context appContext) {
         if (client == null) {
@@ -41,7 +43,14 @@ public class ApiUtils {
         return retrofit;
     }
 
-    public static void loginUser(OkHttpClient client, String baseUrl, String login, String password) throws IOException {
+    public static VirtonomicaApi getApi(OkHttpClient client, String baseUrl) {
+        if (api == null) {
+            api = ApiUtils.getRetrofit(client, baseUrl).create(VirtonomicaApi.class);
+        }
+        return api;
+    }
+
+    public static Call loginUser(OkHttpClient client, String baseUrl, String login, String password, String realm) {
         RequestBody authRequestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("userData[login]", login)
@@ -49,17 +58,17 @@ public class ApiUtils {
                 .addFormDataPart("userData[lang]", "ru")
                 .build();
         Request authRequest = new Request.Builder()
-                .url(baseUrl + "vera/main/user/login")
+                .url(baseUrl + realm + "/main/user/login")
                 .post(authRequestBody)
                 .build();
-        client.newCall(authRequest).execute();
+        return client.newCall(authRequest);
     }
 
-    public static void changeRealm(OkHttpClient client, String baseUrl, String realm) throws IOException {
+    public static Call changeRealm(OkHttpClient client, String baseUrl, String realm) {
         Request request = new Request.Builder()
                 .url(baseUrl + realm + "/main/user/privat/headquarters")
                 .build();
-        client.newCall(request).execute();
+        return client.newCall(request);
     }
 
     public static SharedPreferences getSharedPreferences(Context context) {
