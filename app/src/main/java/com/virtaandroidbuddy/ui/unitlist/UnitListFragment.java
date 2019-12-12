@@ -20,7 +20,8 @@ import com.virtaandroidbuddy.api.model.Company;
 import com.virtaandroidbuddy.api.model.Unit;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -48,8 +49,8 @@ public class UnitListFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fr_unit_list, container, false);
 
         mUnitListView = view.findViewById(R.id.lv_units);
-        final List<String> testUnits = Arrays.asList("Android", "Местоположение", "Безумный текст", "Лалака", "Сеточка");
-        final ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, testUnits);
+        final List<String> emptyList = Collections.emptyList();
+        mAdapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_list_item_1, emptyList);
         mUnitListView.setAdapter(mAdapter);
 
         try {
@@ -65,7 +66,11 @@ public class UnitListFragment extends Fragment {
                         @Override
                         public void onResponse(Call<List<Unit>> call, Response<List<Unit>> response) {
                             Log.d("VirtonomicaApi", "onResponse");
-                            Log.d("VirtonomicaApi", "response = " + response.toString());
+                            final List<String> list = new ArrayList<>();
+                            for(Unit item : response.body()){
+                                list.add(item.getName());
+                            }
+                            mAdapter.addAll(list);
                         }
 
                         @Override
