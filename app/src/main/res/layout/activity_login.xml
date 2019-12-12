@@ -23,6 +23,11 @@
         android:hint="@string/hint_password"
         android:inputType="textPassword" />
 
+    <Spinner
+        android:id="@+id/sp_realm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
