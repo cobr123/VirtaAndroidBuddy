@@ -12,6 +12,11 @@ public class Unit implements Serializable {
     @SerializedName("name")
     private String mName;
 
+    public Unit(String mId, String mName) {
+        this.mId = mId;
+        this.mName = mName;
+    }
+
     public String getId() {
         return mId;
     }

@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.virtaandroidbuddy.R;
-import com.virtaandroidbuddy.api.ApiUtils;
 import com.virtaandroidbuddy.ui.SingleFragmentActivity;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 
