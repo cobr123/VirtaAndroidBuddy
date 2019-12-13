@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 

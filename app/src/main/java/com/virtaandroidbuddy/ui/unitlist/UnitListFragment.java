@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.api.ApiUtils;
@@ -20,7 +21,6 @@ import com.virtaandroidbuddy.api.model.Company;
 import com.virtaandroidbuddy.api.model.Unit;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 
-import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -29,10 +29,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class UnitListFragment extends Fragment {
+public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView mUnitListRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private final UnitListAdapter mUnitListAdapter = new UnitListAdapter();
+    private View mErrorView;
 
     public static UnitListFragment newInstance() {
         return new UnitListFragment();
@@ -47,6 +49,9 @@ public class UnitListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mUnitListRecyclerView = view.findViewById(R.id.recycler);
+        mSwipeRefreshLayout = view.findViewById(R.id.refresher);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mErrorView = view.findViewById(R.id.error_view);
     }
 
     @Override
@@ -54,8 +59,10 @@ public class UnitListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mUnitListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mUnitListRecyclerView.setAdapter(mUnitListAdapter);
-        //mUnitListAdapter.addData(Arrays.asList(new Unit("1","name 1"), new Unit("2","name 2")));
+        refreshData();
+    }
 
+    private void refreshData() {
         try {
             final OkHttpClient client = ApiUtils.getClient(getActivity());
             final String realm = ApiUtils.getRealm(getActivity());
@@ -69,7 +76,11 @@ public class UnitListFragment extends Fragment {
                         @Override
                         public void onResponse(Call<List<Unit>> call, Response<List<Unit>> response) {
                             Log.d("VirtonomicaApi", "onResponse");
-                            mUnitListAdapter.addData(response.body());
+                            if (response != null && response.body() != null) {
+                                showData(response.body());
+                            } else {
+                                Log.d("VirtonomicaApi", "response = " + response);
+                            }
                         }
 
                         @Override
@@ -97,4 +108,27 @@ public class UnitListFragment extends Fragment {
         startActivity(intent);
     }
 
+    @Override
+    public void onRefresh() {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                refreshData();
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+    }
+
+    private void showError() {
+        mErrorView.setVisibility(View.VISIBLE);
+        mUnitListRecyclerView.setVisibility(View.GONE);
+    }
+
+    private void showData(List<Unit> data) {
+        mUnitListAdapter.addData(data, true);
+        mErrorView.setVisibility(View.GONE);
+        mUnitListRecyclerView.setVisibility(View.VISIBLE);
+    }
 }
