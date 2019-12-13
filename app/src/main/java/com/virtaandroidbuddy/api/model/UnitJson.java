@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Unit implements Serializable {
+public class UnitJson implements Serializable {
 
     @SerializedName("id")
     private String mId;
@@ -12,7 +12,7 @@ public class Unit implements Serializable {
     @SerializedName("name")
     private String mName;
 
-    public Unit(String mId, String mName) {
+    public UnitJson(String mId, String mName) {
         this.mId = mId;
         this.mName = mName;
     }

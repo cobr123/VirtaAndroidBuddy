@@ -17,8 +17,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.api.ApiUtils;
 import com.virtaandroidbuddy.api.VirtonomicaApi;
-import com.virtaandroidbuddy.api.model.Company;
-import com.virtaandroidbuddy.api.model.Unit;
+import com.virtaandroidbuddy.api.model.CompanyJson;
+import com.virtaandroidbuddy.api.model.UnitJson;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 
 import java.util.List;
@@ -68,13 +68,13 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
             final String realm = ApiUtils.getRealm(getActivity());
             final VirtonomicaApi api = ApiUtils.getApi(client, getString(R.string.base_url));
 
-            api.getCompanyInfo(realm).enqueue(new Callback<Company>() {
+            api.getCompanyInfo(realm).enqueue(new Callback<CompanyJson>() {
                 @Override
-                public void onResponse(Call<Company> call, Response<Company> response) {
-                    final Company company = response.body();
-                    api.getUnitList(realm, company.getId()).enqueue(new Callback<List<Unit>>() {
+                public void onResponse(Call<CompanyJson> call, Response<CompanyJson> response) {
+                    final CompanyJson company = response.body();
+                    api.getUnitList(realm, company.getId()).enqueue(new Callback<List<UnitJson>>() {
                         @Override
-                        public void onResponse(Call<List<Unit>> call, Response<List<Unit>> response) {
+                        public void onResponse(Call<List<UnitJson>> call, Response<List<UnitJson>> response) {
                             Log.d("VirtonomicaApi", "onResponse");
                             if (response != null && response.body() != null) {
                                 showData(response.body());
@@ -84,7 +84,7 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
                         }
 
                         @Override
-                        public void onFailure(Call<List<Unit>> call, Throwable t) {
+                        public void onFailure(Call<List<UnitJson>> call, Throwable t) {
                             Log.d("VirtonomicaApi", t.toString());
                             showLoginWindow();
                         }
@@ -92,7 +92,7 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
 
                 @Override
-                public void onFailure(Call<Company> call, Throwable t) {
+                public void onFailure(Call<CompanyJson> call, Throwable t) {
                     Log.d("VirtonomicaApi", t.toString());
                     showLoginWindow();
                 }
@@ -126,7 +126,7 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
         mUnitListRecyclerView.setVisibility(View.GONE);
     }
 
-    private void showData(List<Unit> data) {
+    private void showData(List<UnitJson> data) {
         mUnitListAdapter.addData(data, true);
         mErrorView.setVisibility(View.GONE);
         mUnitListRecyclerView.setVisibility(View.VISIBLE);

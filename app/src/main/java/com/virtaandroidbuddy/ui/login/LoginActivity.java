@@ -16,16 +16,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.api.ApiUtils;
 import com.virtaandroidbuddy.api.VirtonomicaApi;
-import com.virtaandroidbuddy.api.model.Company;
+import com.virtaandroidbuddy.api.model.CompanyJson;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,15 +62,15 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
                             final VirtonomicaApi api = ApiUtils.getApi(client, getString(R.string.base_url));
-                            api.getCompanyInfo(realm).enqueue(new Callback<Company>() {
+                            api.getCompanyInfo(realm).enqueue(new Callback<CompanyJson>() {
                                 @Override
-                                public void onResponse(Call<Company> call, Response<Company> response) {
+                                public void onResponse(Call<CompanyJson> call, Response<CompanyJson> response) {
                                     mErrorTv.setText("");
                                     finish();
                                 }
 
                                 @Override
-                                public void onFailure(Call<Company> call, Throwable t) {
+                                public void onFailure(Call<CompanyJson> call, Throwable t) {
                                     Log.d("VirtonomicaApi", t.toString());
                                     mErrorTv.setText(t.toString());
                                 }

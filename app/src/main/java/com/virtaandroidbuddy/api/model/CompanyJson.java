@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Company implements Serializable {
+public class CompanyJson implements Serializable {
 
     @SerializedName("id")
     private String mId;
@@ -42,7 +42,7 @@ public class Company implements Serializable {
 
     @Override
     public String toString() {
-        return "Company{" +
+        return "CompanyJson{" +
                 "id='" + mId + '\'' +
                 ", name='" + mName + '\'' +
                 ", presidentUserId='" + mPresidentUserId + '\'' +
