@@ -2,6 +2,7 @@ package com.virtaandroidbuddy.ui.unitlist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,24 +71,35 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
             final VirtonomicaApi api = ApiUtils.getApi(client, getString(R.string.base_url));
             final VirtonomicaDao virtonomicaDao = ((AppDelegate) getActivity().getApplicationContext()).getVirtonomicaDatabase().getVirtonomicaDao();
             final Session session = virtonomicaDao.getSession();
+            final Handler handler = new Handler(getActivity().getMainLooper());
             api.getUnitList(session.getRealm(), session.getCompanyId()).enqueue(new Callback<List<UnitListJson>>() {
                 @Override
-                public void onResponse(Call<List<UnitListJson>> call, Response<List<UnitListJson>> response) {
+                public void onResponse(Call<List<UnitListJson>> call, final Response<List<UnitListJson>> response) {
                     Log.d("VirtonomicaApi", "onResponse");
-                    if (response != null && response.body() != null && response.code() == 200) {
-                        showData(response.body());
-                    } else {
-                        Log.d("VirtonomicaApi", "response = " + response);
-                        virtonomicaDao.deleteSession(session);
-                        showLoginWindow();
-                    }
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (response != null && response.body() != null && response.code() == 200) {
+                                showData(response.body());
+                            } else {
+                                Log.d("VirtonomicaApi", "response = " + response);
+                                virtonomicaDao.deleteSession(session);
+                                showLoginWindow();
+                            }
+                        }
+                    });
                 }
 
                 @Override
                 public void onFailure(Call<List<UnitListJson>> call, Throwable t) {
                     Log.d("VirtonomicaApi", t.toString());
-                    virtonomicaDao.deleteSession(session);
-                    showLoginWindow();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            virtonomicaDao.deleteSession(session);
+                            showLoginWindow();
+                        }
+                    });
                 }
             });
         } catch (Exception e) {
