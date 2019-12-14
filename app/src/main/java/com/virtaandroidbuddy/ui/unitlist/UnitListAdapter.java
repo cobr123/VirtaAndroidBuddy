@@ -36,11 +36,11 @@ public class UnitListAdapter extends RecyclerView.Adapter<UnitListHolder> {
         return mUnitList.size();
     }
 
-    public void addData(List<UnitListJson> data, boolean refresh) {
+    public void addData(UnitListJson data, boolean refresh) {
         if (refresh) {
             mUnitList.clear();
         }
-        mUnitList.addAll(data);
+        mUnitList.add(data);
         notifyDataSetChanged();
     }
 }

@@ -2,7 +2,6 @@ package com.virtaandroidbuddy.ui.unitlist;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +23,9 @@ import com.virtaandroidbuddy.database.VirtonomicaDao;
 import com.virtaandroidbuddy.database.model.Session;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 
-import java.util.List;
-
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -71,39 +67,18 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
             final VirtonomicaApi api = ApiUtils.getApi(client, getString(R.string.base_url));
             final VirtonomicaDao virtonomicaDao = ((AppDelegate) getActivity().getApplicationContext()).getVirtonomicaDatabase().getVirtonomicaDao();
             final Session session = virtonomicaDao.getSession();
-            final Handler handler = new Handler(getActivity().getMainLooper());
-            api.getUnitList(session.getRealm(), session.getCompanyId()).enqueue(new Callback<List<UnitListJson>>() {
-                @Override
-                public void onResponse(Call<List<UnitListJson>> call, final Response<List<UnitListJson>> response) {
-                    Log.d("VirtonomicaApi", "onResponse");
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (response.body() != null && response.code() == 200) {
-                                showData(response.body());
-                            } else {
-                                Log.d("VirtonomicaApi", "response = " + response);
-                                virtonomicaDao.deleteSession(session);
-                                showLoginWindow(response.toString());
-                            }
-                        }
-                    });
-                }
 
-                @Override
-                public void onFailure(Call<List<UnitListJson>> call, final Throwable t) {
-                    Log.d("VirtonomicaApi", t.toString());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            virtonomicaDao.deleteSession(session);
-                            showLoginWindow(t.toString());
-                        }
-                    });
-                }
-            });
+            api.getUnitList(session.getRealm(), session.getCompanyId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::showData,
+                            throwable -> {
+                                Log.e("VirtonomicaApi", throwable.toString(), throwable);
+                                virtonomicaDao.deleteSession(session);
+                                showLoginWindow(throwable.toString());
+                            });
         } catch (Exception e) {
-            Log.d("VirtonomicaApi", e.toString());
+            Log.e("VirtonomicaApi", e.toString());
             showLoginWindow(null);
         }
     }
@@ -146,7 +121,7 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
         mUnitListRecyclerView.setVisibility(View.GONE);
     }
 
-    private void showData(List<UnitListJson> data) {
+    private void showData(UnitListJson data) {
         mUnitListAdapter.addData(data, true);
         mErrorView.setVisibility(View.GONE);
         mUnitListRecyclerView.setVisibility(View.VISIBLE);

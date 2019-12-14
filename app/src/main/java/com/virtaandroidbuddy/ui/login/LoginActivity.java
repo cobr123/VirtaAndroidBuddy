@@ -1,7 +1,6 @@
 package com.virtaandroidbuddy.ui.login;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,18 +17,14 @@ import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.api.ApiUtils;
 import com.virtaandroidbuddy.api.VirtonomicaApi;
-import com.virtaandroidbuddy.api.model.CompanyJson;
 import com.virtaandroidbuddy.database.VirtonomicaDao;
 import com.virtaandroidbuddy.database.model.Session;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -55,69 +50,37 @@ public class LoginActivity extends AppCompatActivity {
                 ApiUtils.setCookies(view.getContext(), null);
                 final String realm = realms.get((int) mRealmSp.getSelectedItemId());
                 try {
-                    final OkHttpClient client = ApiUtils.getClient(view.getContext());
-                    final VirtonomicaApi api = ApiUtils.getApi(client, getString(R.string.base_url));
-                    final Handler handler = new Handler(getMainLooper());
+                    final VirtonomicaApi api = ApiUtils.getApi(ApiUtils.getClient(view.getContext()), getString(R.string.base_url));
 
                     //init cookies
-                    api.getCompanyInfo(realm).enqueue(new Callback<CompanyJson>() {
-                        @Override
-                        public void onResponse(Call<CompanyJson> call, Response<CompanyJson> response) {
-                            Log.d("VirtonomicaApi", "onResponse init cookies");
-                        }
-
-                        @Override
-                        public void onFailure(Call<CompanyJson> call, Throwable t) {
-                            ApiUtils.loginUser(client, getString(R.string.base_url), login, password, realm).enqueue(new okhttp3.Callback() {
-                                @Override
-                                public void onFailure(okhttp3.Call call, final IOException e) {
-                                    Log.d("VirtonomicaApi", e.toString());
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            mErrorTv.setText(e.toString());
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                                    api.getCompanyInfo(realm).enqueue(new Callback<CompanyJson>() {
-                                        @Override
-                                        public void onResponse(Call<CompanyJson> call, final Response<CompanyJson> response) {
-                                            handler.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    if (response.body() == null || response.body().getId() == null || response.body().getId().isEmpty()) {
-                                                        mErrorTv.setText(getString(R.string.error_create_company_before_login));
-                                                    } else {
-                                                        mErrorTv.setText("");
-                                                        VirtonomicaDao virtonomicaDao = ((AppDelegate) getApplicationContext()).getVirtonomicaDatabase().getVirtonomicaDao();
-                                                        virtonomicaDao.insertSession(new Session(1, realm, response.body().getId()));
-                                                        finish();
-                                                    }
-                                                }
-                                            });
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<CompanyJson> call, final Throwable t) {
-                                            Log.d("VirtonomicaApi", t.toString());
-                                            handler.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    mErrorTv.setText(t.toString());
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.d("VirtonomicaApi", e.toString());
-                    mErrorTv.setText(getString(R.string.error_create_company_before_login));
+                    api.getCompanyInfo(realm)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(companyJson -> Log.d("VirtonomicaApi", "accept init cookies"),
+                                    throwable ->
+                                            api.login(realm, login, password, "ru")
+                                                    .subscribeOn(Schedulers.io())
+                                                    .observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribe(() -> api.getCompanyInfo(realm)
+                                                                    .subscribeOn(Schedulers.io())
+                                                                    .observeOn(AndroidSchedulers.mainThread())
+                                                                    .subscribe(companyJson -> {
+                                                                                mErrorTv.setText("");
+                                                                                VirtonomicaDao virtonomicaDao = ((AppDelegate) getApplicationContext()).getVirtonomicaDatabase().getVirtonomicaDao();
+                                                                                virtonomicaDao.insertSession(new Session(1, realm, companyJson.getId()));
+                                                                                finish();
+                                                                            },
+                                                                            throwable12 -> {
+                                                                                Log.e("VirtonomicaApi", throwable12.toString(), throwable12);
+                                                                                mErrorTv.setText(getString(R.string.error_create_company_before_login));
+                                                                            }),
+                                                            throwable1 -> {
+                                                                Log.e("VirtonomicaApi", throwable1.toString(), throwable1);
+                                                                mErrorTv.setText(throwable1.toString());
+                                                            }));
+                } catch (Throwable t) {
+                    Log.e("VirtonomicaApi", t.toString());
+                    mErrorTv.setText(t.toString());
                 }
             }
         }

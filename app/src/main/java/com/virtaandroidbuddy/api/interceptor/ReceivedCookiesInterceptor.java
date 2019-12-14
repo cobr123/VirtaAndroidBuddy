@@ -27,18 +27,20 @@ public class ReceivedCookiesInterceptor implements Interceptor {
 
         if (!originalResponse.headers("Set-Cookie").isEmpty()) {
             final Set<String> cookies = new HashSet<>(originalResponse.headers("Set-Cookie"));
-//            Log.d("VirtonomicaApi.SCookie", cookies.toString());
+            Log.d("VirtonomicaApi.SCookie", cookies.toString());
             final Map<String, String> cookieMap = new HashMap<>();
             for (String cookieLine : cookies) {
                 for (String keyValue : cookieLine.split(";")) {
                     final String[] arr = keyValue.split("=");
-                    cookieMap.put(arr[0].trim(), arr[1].trim());
+                    if (arr.length == 2) {
+                        cookieMap.put(arr[0].trim(), arr[1].trim());
+                    }
                 }
             }
             final Set<String> cookieSet = new HashSet<>();
             for (String key : cookieMap.keySet()) {
                 final String keyValue = key + "=" + cookieMap.get(key);
-                Log.d("VirtonomicaApi.SCookie", keyValue);
+                //Log.d("VirtonomicaApi.SCookie", keyValue);
                 cookieSet.add(keyValue);
             }
             ApiUtils.setCookies(context, cookieSet);
