@@ -79,38 +79,53 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (response != null && response.body() != null && response.code() == 200) {
+                            if (response.body() != null && response.code() == 200) {
                                 showData(response.body());
                             } else {
                                 Log.d("VirtonomicaApi", "response = " + response);
                                 virtonomicaDao.deleteSession(session);
-                                showLoginWindow();
+                                showLoginWindow(response.toString());
                             }
                         }
                     });
                 }
 
                 @Override
-                public void onFailure(Call<List<UnitListJson>> call, Throwable t) {
+                public void onFailure(Call<List<UnitListJson>> call, final Throwable t) {
                     Log.d("VirtonomicaApi", t.toString());
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
                             virtonomicaDao.deleteSession(session);
-                            showLoginWindow();
+                            showLoginWindow(t.toString());
                         }
                     });
                 }
             });
         } catch (Exception e) {
             Log.d("VirtonomicaApi", e.toString());
-            showLoginWindow();
+            showLoginWindow(null);
         }
     }
 
-    private void showLoginWindow() {
+    private final int REQUEST_CODE_LOGIN = 1;
+
+    private void showLoginWindow(final String error) {
         final Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
+        intent.putExtra(LoginActivity.ERROR_TEXT_PROP_NAME, error);
+        startActivityForResult(intent, REQUEST_CODE_LOGIN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_LOGIN:
+                refreshData();
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
     }
 
     @Override

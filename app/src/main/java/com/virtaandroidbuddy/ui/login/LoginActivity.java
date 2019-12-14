@@ -133,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
             ApiUtils.setRealm(parent.getContext(), realms.get(0));
         }
     };
+    public static final String ERROR_TEXT_PROP_NAME = "ERROR_TEXT";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -154,6 +155,10 @@ public class LoginActivity extends AppCompatActivity {
             mRealmSp.setSelection(realms.indexOf(prevRealm));
         }
         mLoginBtn.setOnClickListener(mOnClickListener);
+        final String error = getIntent().getStringExtra(ERROR_TEXT_PROP_NAME);
+        if (error != null && !error.isEmpty()) {
+            mErrorTv.setText(error);
+        }
     }
 
 }
