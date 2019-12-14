@@ -56,32 +56,43 @@ public class LoginActivity extends AppCompatActivity {
                     final OkHttpClient client = ApiUtils.getClient(view.getContext());
                     final VirtonomicaApi api = ApiUtils.getApi(client, getString(R.string.base_url));
 
-                    ApiUtils.loginUser(client, getString(R.string.base_url), login, password, realm).enqueue(new okhttp3.Callback() {
+                    //init cookies
+                    api.getCompanyInfo(realm).enqueue(new Callback<CompanyJson>() {
                         @Override
-                        public void onFailure(okhttp3.Call call, IOException e) {
-                            Log.d("VirtonomicaApi", e.toString());
-                            mErrorTv.setText(e.toString());
+                        public void onResponse(Call<CompanyJson> call, Response<CompanyJson> response) {
+                            Log.d("VirtonomicaApi", "onResponse init cookies");
                         }
 
                         @Override
-                        public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                            api.getCompanyInfo(realm).enqueue(new Callback<CompanyJson>() {
+                        public void onFailure(Call<CompanyJson> call, Throwable t) {
+                            ApiUtils.loginUser(client, getString(R.string.base_url), login, password, realm).enqueue(new okhttp3.Callback() {
                                 @Override
-                                public void onResponse(Call<CompanyJson> call, Response<CompanyJson> response) {
-                                    if (response.body() == null || response.body().getId() == null || response.body().getId().isEmpty()) {
-                                        mErrorTv.setText(getString(R.string.error_create_company_before_login));
-                                    } else {
-                                        mErrorTv.setText("");
-                                        VirtonomicaDao virtonomicaDao = ((AppDelegate) getApplicationContext()).getVirtonomicaDatabase().getVirtonomicaDao();
-                                        virtonomicaDao.insertSession(new Session(1, realm, response.body().getId()));
-                                        finish();
-                                    }
+                                public void onFailure(okhttp3.Call call, IOException e) {
+                                    Log.d("VirtonomicaApi", e.toString());
+                                    mErrorTv.setText(e.toString());
                                 }
 
                                 @Override
-                                public void onFailure(Call<CompanyJson> call, Throwable t) {
-                                    Log.d("VirtonomicaApi", t.toString());
-                                    mErrorTv.setText(t.toString());
+                                public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                                    api.getCompanyInfo(realm).enqueue(new Callback<CompanyJson>() {
+                                        @Override
+                                        public void onResponse(Call<CompanyJson> call, Response<CompanyJson> response) {
+                                            if (response.body() == null || response.body().getId() == null || response.body().getId().isEmpty()) {
+                                                mErrorTv.setText(getString(R.string.error_create_company_before_login));
+                                            } else {
+                                                mErrorTv.setText("");
+                                                VirtonomicaDao virtonomicaDao = ((AppDelegate) getApplicationContext()).getVirtonomicaDatabase().getVirtonomicaDao();
+                                                virtonomicaDao.insertSession(new Session(1, realm, response.body().getId()));
+                                                finish();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<CompanyJson> call, Throwable t) {
+                                            Log.d("VirtonomicaApi", t.toString());
+                                            mErrorTv.setText(t.toString());
+                                        }
+                                    });
                                 }
                             });
                         }

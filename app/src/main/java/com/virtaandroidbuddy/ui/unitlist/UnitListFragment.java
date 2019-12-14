@@ -67,11 +67,10 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private void refreshData() {
         try {
             final OkHttpClient client = ApiUtils.getClient(getActivity());
-            final String realm = ApiUtils.getRealm(getActivity());
             final VirtonomicaApi api = ApiUtils.getApi(client, getString(R.string.base_url));
             final VirtonomicaDao virtonomicaDao = ((AppDelegate) getActivity().getApplicationContext()).getVirtonomicaDatabase().getVirtonomicaDao();
             final Session session = virtonomicaDao.getSession();
-            api.getUnitList(realm, session.getCompanyId()).enqueue(new Callback<List<UnitListJson>>() {
+            api.getUnitList(session.getRealm(), session.getCompanyId()).enqueue(new Callback<List<UnitListJson>>() {
                 @Override
                 public void onResponse(Call<List<UnitListJson>> call, Response<List<UnitListJson>> response) {
                     Log.d("VirtonomicaApi", "onResponse");
@@ -79,6 +78,7 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
                         showData(response.body());
                     } else {
                         Log.d("VirtonomicaApi", "response = " + response);
+                        virtonomicaDao.deleteSession(session);
                         showLoginWindow();
                     }
                 }
@@ -86,6 +86,7 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 @Override
                 public void onFailure(Call<List<UnitListJson>> call, Throwable t) {
                     Log.d("VirtonomicaApi", t.toString());
+                    virtonomicaDao.deleteSession(session);
                     showLoginWindow();
                 }
             });
