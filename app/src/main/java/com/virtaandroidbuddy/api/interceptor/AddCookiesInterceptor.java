@@ -1,7 +1,11 @@
-package com.virtaandroidbuddy.api;
+package com.virtaandroidbuddy.api.interceptor;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.virtaandroidbuddy.api.ApiUtils;
+
+import org.jsoup.internal.StringUtil;
 
 import java.io.IOException;
 import java.util.Set;
@@ -29,9 +33,13 @@ public class AddCookiesInterceptor implements Interceptor {
         final Set<String> preferences = ApiUtils.getCookies(context);
 
         Log.d("VirtonomicaApi.ACookie", preferences.toString());
-        for (String cookie : preferences) {
-            builder.addHeader("Cookie", cookie);
+        if (!preferences.isEmpty()) {
+            builder.addHeader("Cookie", StringUtil.join(preferences, "; "));
         }
+//        for (String cookie : preferences) {
+//            Log.d("VirtonomicaApi.ACookie", cookie);
+//            builder.addHeader("Cookie", cookie);
+//        }
 
         return chain.proceed(builder.build());
     }

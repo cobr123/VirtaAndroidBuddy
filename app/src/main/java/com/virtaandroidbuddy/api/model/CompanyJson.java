@@ -1,19 +1,11 @@
 package com.virtaandroidbuddy.api.model;
 
-
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 public class CompanyJson implements Serializable {
 
-    @SerializedName("id")
     private String mId;
-
-    @SerializedName("name")
     private String mName;
-
-    @SerializedName("president_user_id")
     private String mPresidentUserId;
 
     public String getId() {

@@ -13,10 +13,13 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.api.ApiUtils;
 import com.virtaandroidbuddy.api.VirtonomicaApi;
 import com.virtaandroidbuddy.api.model.CompanyJson;
+import com.virtaandroidbuddy.database.VirtonomicaDao;
+import com.virtaandroidbuddy.database.model.Session;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -51,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                 final String realm = realms.get((int) mRealmSp.getSelectedItemId());
                 try {
                     final OkHttpClient client = ApiUtils.getClient(view.getContext());
+                    final VirtonomicaApi api = ApiUtils.getApi(client, getString(R.string.base_url));
 
                     ApiUtils.loginUser(client, getString(R.string.base_url), login, password, realm).enqueue(new okhttp3.Callback() {
                         @Override
@@ -61,12 +65,17 @@ public class LoginActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                            final VirtonomicaApi api = ApiUtils.getApi(client, getString(R.string.base_url));
                             api.getCompanyInfo(realm).enqueue(new Callback<CompanyJson>() {
                                 @Override
                                 public void onResponse(Call<CompanyJson> call, Response<CompanyJson> response) {
-                                    mErrorTv.setText("");
-                                    finish();
+                                    if (response.body() == null || response.body().getId() == null || response.body().getId().isEmpty()) {
+                                        mErrorTv.setText(getString(R.string.error_create_company_before_login));
+                                    } else {
+                                        mErrorTv.setText("");
+                                        VirtonomicaDao virtonomicaDao = ((AppDelegate) getApplicationContext()).getVirtonomicaDatabase().getVirtonomicaDao();
+                                        virtonomicaDao.insertSession(new Session(1, realm, response.body().getId()));
+                                        finish();
+                                    }
                                 }
 
                                 @Override
@@ -80,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     Log.d("VirtonomicaApi", e.toString());
-                    mErrorTv.setText(getString(R.string.error__create_company_before_login));
+                    mErrorTv.setText(getString(R.string.error_create_company_before_login));
                 }
             }
         }
@@ -119,7 +128,6 @@ public class LoginActivity extends AppCompatActivity {
             mRealmSp.setSelection(realms.indexOf(prevRealm));
         }
         mLoginBtn.setOnClickListener(mOnClickListener);
-
     }
 
 }

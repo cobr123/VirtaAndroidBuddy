@@ -17,7 +17,7 @@ public interface VirtonomicaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertSession(Session session);
 
-    @Query("select * from session")
+    @Query("select * from session where id = 1")
     Session getSession();
 
     @Delete

@@ -4,6 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.virtaandroidbuddy.api.deserializer.CompanyJsonDeserializer;
+import com.virtaandroidbuddy.api.deserializer.UnitListJsonDeserializer;
+import com.virtaandroidbuddy.api.interceptor.AddCookiesInterceptor;
+import com.virtaandroidbuddy.api.interceptor.ReceivedCookiesInterceptor;
+import com.virtaandroidbuddy.api.model.CompanyJson;
+import com.virtaandroidbuddy.api.model.UnitListJson;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +35,8 @@ public class ApiUtils {
             client = new OkHttpClient.Builder()
                     .addInterceptor(new AddCookiesInterceptor(appContext))
                     .addInterceptor(new ReceivedCookiesInterceptor(appContext))
+                    //.addInterceptor(new LoggingInterceptor())
+                    .followRedirects(true)
                     .build();
         }
         return client;
@@ -33,10 +44,14 @@ public class ApiUtils {
 
     public static Retrofit getRetrofit(OkHttpClient client, String baseUrl) {
         if (retrofit == null) {
+            final Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(CompanyJson.class, new CompanyJsonDeserializer())
+                    .registerTypeAdapter(UnitListJson.class, new UnitListJsonDeserializer())
+                    .create();
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
         return retrofit;
@@ -61,13 +76,6 @@ public class ApiUtils {
                 .post(authRequestBody)
                 .build();
         return client.newCall(authRequest);
-    }
-
-    public static Call changeRealm(OkHttpClient client, String baseUrl, String realm) {
-        Request request = new Request.Builder()
-                .url(baseUrl + realm + "/main/user/privat/headquarters")
-                .build();
-        return client.newCall(request);
     }
 
     public static SharedPreferences getSharedPreferences(Context context) {

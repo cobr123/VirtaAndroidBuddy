@@ -1,7 +1,7 @@
 package com.virtaandroidbuddy.api;
 
 import com.virtaandroidbuddy.api.model.CompanyJson;
-import com.virtaandroidbuddy.api.model.UnitJson;
+import com.virtaandroidbuddy.api.model.UnitListJson;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public interface VirtonomicaApi {
     Call<CompanyJson> getCompanyInfo(@Path("realm") String realm);
 
     @GET("api/{realm}/my/company/units")
-    Call<List<UnitJson>> getUnitList(@Path("realm") String realm, @Query("id") String company_id);
+    Call<List<UnitListJson>> getUnitList(@Path("realm") String realm, @Query("id") String company_id);
 }
