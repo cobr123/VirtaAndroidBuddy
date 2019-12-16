@@ -18,9 +18,15 @@ import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.api.ApiUtils;
 import com.virtaandroidbuddy.api.VirtonomicaApi;
+import com.virtaandroidbuddy.api.model.UnitListDataJson;
+import com.virtaandroidbuddy.api.model.UnitListJson;
 import com.virtaandroidbuddy.database.VirtonomicaDao;
 import com.virtaandroidbuddy.database.model.Session;
+import com.virtaandroidbuddy.database.model.Unit;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -69,6 +75,36 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             api.getUnitList(session.getRealm(), session.getCompanyId())
                     .subscribeOn(Schedulers.io())
+                    .doOnSuccess(unitListJson -> {
+                        final List<UnitListDataJson> data = unitListJson.getData();
+                        final List<Unit> unitList = new ArrayList<>(data.size());
+                        for (UnitListDataJson item : data) {
+                            final Unit unit = new Unit();
+                            unit.setCompanyId(session.getCompanyId());
+                            unit.setId(item.getId());
+                            unit.setRealm(session.getRealm());
+                            unit.setName(item.getName());
+                            unitList.add(unit);
+                        }
+                        virtonomicaDao.insertUnits(unitList);
+                    })
+                    .onErrorReturn(throwable -> {
+                        if (ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())) {
+                            final List<Unit> unitList = virtonomicaDao.getUnitList(session.getRealm(), session.getCompanyId());
+                            final List<UnitListDataJson> data = new ArrayList<>(unitList.size());
+                            for (Unit unit : unitList) {
+                                final UnitListDataJson dataItem = new UnitListDataJson();
+                                dataItem.setId(unit.getId());
+                                dataItem.setName(unit.getName());
+                                data.add(dataItem);
+                            }
+                            final UnitListJson unitListJson = new UnitListJson();
+                            unitListJson.setData(data);
+                            return unitListJson;
+                        } else {
+                            return null;
+                        }
+                    })
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(disposable -> mSwipeRefreshLayout.setRefreshing(true))
                     .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))

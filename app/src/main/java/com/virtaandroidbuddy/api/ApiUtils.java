@@ -13,7 +13,12 @@ import com.virtaandroidbuddy.api.interceptor.ReceivedCookiesInterceptor;
 import com.virtaandroidbuddy.api.model.CompanyJson;
 import com.virtaandroidbuddy.api.model.UnitListJson;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import okhttp3.OkHttpClient;
@@ -23,6 +28,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class ApiUtils {
+    public static final List<Class<?>> NETWORK_EXCEPTIONS = Arrays.asList(
+            UnknownHostException.class,
+            SocketTimeoutException.class,
+            ConnectException.class
+    );
     static private OkHttpClient client = null;
     static private Retrofit retrofit = null;
     static private VirtonomicaApi api = null;
