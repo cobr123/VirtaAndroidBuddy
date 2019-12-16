@@ -5,10 +5,14 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.virtaandroidbuddy.api.model.UnitListDataJson;
 import com.virtaandroidbuddy.api.model.UnitListJson;
 
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class UnitListJsonDeserializer implements JsonDeserializer<UnitListJson> {
     @Override
@@ -16,10 +20,21 @@ public class UnitListJsonDeserializer implements JsonDeserializer<UnitListJson> 
         final UnitListJson unitListJson = new UnitListJson();
         final JsonObject jsonObject = json.getAsJsonObject();
         final JsonObject info = jsonObject.get("info").getAsJsonObject();
+        final JsonObject data = jsonObject.get("data").getAsJsonObject();
 
-        unitListJson.setId("count = " + info.get("count").getAsString());
-        unitListJson.setName("page_size = " + info.get("page_size").getAsString());
+        unitListJson.setCount(info.get("count").getAsLong());
+        unitListJson.setPage(info.get("page").getAsLong());
+        unitListJson.setPageSize(info.get("page_size").getAsLong());
 
+        final List<UnitListDataJson> dataList = new ArrayList<>(data.size());
+        for (Map.Entry<String, JsonElement> entry : data.entrySet()) {
+            final JsonObject item = (JsonObject) entry.getValue();
+            final UnitListDataJson dataItem = new UnitListDataJson();
+            dataItem.setId(item.get("id").getAsString());
+            dataItem.setName(item.get("name").getAsString());
+            dataList.add(dataItem);
+        }
+        unitListJson.setData(dataList);
         return unitListJson;
     }
 }

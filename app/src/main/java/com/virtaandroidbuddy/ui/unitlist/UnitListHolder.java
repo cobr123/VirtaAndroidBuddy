@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.virtaandroidbuddy.R;
-import com.virtaandroidbuddy.api.model.UnitListJson;
+import com.virtaandroidbuddy.api.model.UnitListDataJson;
 
 
 public class UnitListHolder extends RecyclerView.ViewHolder {
@@ -22,7 +22,7 @@ public class UnitListHolder extends RecyclerView.ViewHolder {
         mId = itemView.findViewById(R.id.tv_id);
     }
 
-    public void bind(UnitListJson unit) {
+    public void bind(UnitListDataJson unit) {
         mName.setText(unit.getName());
         mId.setText(unit.getId());
     }

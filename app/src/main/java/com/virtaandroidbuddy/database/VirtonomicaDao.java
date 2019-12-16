@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.virtaandroidbuddy.database.model.Company;
 import com.virtaandroidbuddy.database.model.Session;
 import com.virtaandroidbuddy.database.model.Unit;
 
@@ -31,4 +32,14 @@ public interface VirtonomicaDao {
 
     @Delete
     void deleteUnit(Unit unit);
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertCompany(Company company);
+
+    @Query("select * from company where realm = :realm and id = :companyId")
+    Company getCompany(String realm, String companyId);
+
+    @Delete
+    void deleteCompany(Company company);
 }

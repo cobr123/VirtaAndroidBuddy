@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.virtaandroidbuddy.R;
-import com.virtaandroidbuddy.api.model.UnitListJson;
+import com.virtaandroidbuddy.api.model.UnitListDataJson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class UnitListAdapter extends RecyclerView.Adapter<UnitListHolder> {
 
-    private final List<UnitListJson> mUnitList = new ArrayList<>();
+    private final List<UnitListDataJson> mUnitList = new ArrayList<>();
 
     @NonNull
     @Override
@@ -36,11 +36,11 @@ public class UnitListAdapter extends RecyclerView.Adapter<UnitListHolder> {
         return mUnitList.size();
     }
 
-    public void addData(UnitListJson data, boolean refresh) {
+    public void addData(List<UnitListDataJson> data, boolean refresh) {
         if (refresh) {
             mUnitList.clear();
         }
-        mUnitList.add(data);
+        mUnitList.addAll(data);
         notifyDataSetChanged();
     }
 }

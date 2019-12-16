@@ -18,7 +18,6 @@ import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.api.ApiUtils;
 import com.virtaandroidbuddy.api.VirtonomicaApi;
-import com.virtaandroidbuddy.api.model.UnitListJson;
 import com.virtaandroidbuddy.database.VirtonomicaDao;
 import com.virtaandroidbuddy.database.model.Session;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
@@ -71,8 +70,16 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
             api.getUnitList(session.getRealm(), session.getCompanyId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::showData,
+                    .doOnSubscribe(disposable -> mSwipeRefreshLayout.setRefreshing(true))
+                    .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(unitListJson -> {
+                                mErrorView.setVisibility(View.GONE);
+                                mUnitListRecyclerView.setVisibility(View.VISIBLE);
+                                mUnitListAdapter.addData(unitListJson.getData(), true);
+                            },
                             throwable -> {
+                                mErrorView.setVisibility(View.VISIBLE);
+                                mUnitListRecyclerView.setVisibility(View.GONE);
                                 Log.e("VirtonomicaApi", throwable.toString(), throwable);
                                 virtonomicaDao.deleteSession(session);
                                 showLoginWindow(throwable.toString());
@@ -105,25 +112,6 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                refreshData();
-                if (mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
-    }
-
-    private void showError() {
-        mErrorView.setVisibility(View.VISIBLE);
-        mUnitListRecyclerView.setVisibility(View.GONE);
-    }
-
-    private void showData(UnitListJson data) {
-        mUnitListAdapter.addData(data, true);
-        mErrorView.setVisibility(View.GONE);
-        mUnitListRecyclerView.setVisibility(View.VISIBLE);
+        mSwipeRefreshLayout.post(this::refreshData);
     }
 }
