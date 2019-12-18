@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 
-@Entity(primaryKeys = {"realm", "company_id", "id"})
+@Entity(primaryKeys = {"realm", "id"})
 public class Unit {
 
     @NonNull
@@ -16,7 +16,6 @@ public class Unit {
     @ColumnInfo(name = "id")
     private String mId;
 
-    @NonNull
     @ColumnInfo(name = "company_id")
     private String mCompanyId;
 
@@ -27,26 +26,28 @@ public class Unit {
     }
 
     @Ignore
-    public Unit(String mRealm, String mId, String mName, String companyId) {
+    public Unit(@NonNull String mRealm, @NonNull String mId, String mName, String companyId) {
         this.mRealm = mRealm;
         this.mId = mId;
         this.mName = mName;
         mCompanyId = companyId;
     }
 
+    @NonNull
     public String getRealm() {
         return mRealm;
     }
 
-    public void setRealm(String realm) {
+    public void setRealm(@NonNull String realm) {
         mRealm = realm;
     }
 
+    @NonNull
     public String getId() {
         return mId;
     }
 
-    public void setId(String id) {
+    public void setId(@NonNull String id) {
         mId = id;
     }
 

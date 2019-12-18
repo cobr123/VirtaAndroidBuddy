@@ -9,6 +9,7 @@ import androidx.room.Query;
 import com.virtaandroidbuddy.database.model.Company;
 import com.virtaandroidbuddy.database.model.Session;
 import com.virtaandroidbuddy.database.model.Unit;
+import com.virtaandroidbuddy.database.model.UnitSummary;
 
 import java.util.List;
 
@@ -33,7 +34,6 @@ public interface VirtonomicaDao {
     @Delete
     void deleteUnit(Unit unit);
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCompany(Company company);
 
@@ -42,4 +42,13 @@ public interface VirtonomicaDao {
 
     @Delete
     void deleteCompany(Company company);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertUnitSummary(UnitSummary unitSummary);
+
+    @Query("select * from unitsummary where realm = :realm and id = :unitId")
+    UnitSummary getUnitSummary(String realm, String unitId);
+
+    @Delete
+    void deleteUnitSummary(UnitSummary unitSummary);
 }

@@ -2,6 +2,7 @@ package com.virtaandroidbuddy.api;
 
 import com.virtaandroidbuddy.api.model.CompanyJson;
 import com.virtaandroidbuddy.api.model.UnitListJson;
+import com.virtaandroidbuddy.api.model.UnitSummaryJson;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -25,4 +26,7 @@ public interface VirtonomicaApi {
 
     @GET("api/{realm}/my/company/units")
     Single<UnitListJson> getUnitList(@Path("realm") String realm, @Query("id") String company_id);
+
+    @GET("api/{realm}/my/unit/summary")
+    Single<UnitSummaryJson> getUnitSummary(@Path("realm") String realm, @Query("id") String unit_id);
 }

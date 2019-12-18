@@ -3,10 +3,10 @@ package com.virtaandroidbuddy.database.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-
+import androidx.room.Ignore;
 
 @Entity(primaryKeys = {"realm", "id"})
-public class Company {
+public class UnitSummary {
 
     @NonNull
     @ColumnInfo(name = "realm")
@@ -16,11 +16,22 @@ public class Company {
     @ColumnInfo(name = "id")
     private String mId;
 
+    @ColumnInfo(name = "company_id")
+    private String mCompanyId;
+
     @ColumnInfo(name = "name")
     private String mName;
 
-    @ColumnInfo(name = "president_user_id")
-    private String mPresidentUserId;
+    public UnitSummary() {
+    }
+
+    @Ignore
+    public UnitSummary(@NonNull String mRealm, @NonNull String mId, String mName, String companyId) {
+        this.mRealm = mRealm;
+        this.mId = mId;
+        this.mName = mName;
+        mCompanyId = companyId;
+    }
 
     @NonNull
     public String getRealm() {
@@ -36,24 +47,23 @@ public class Company {
         return mId;
     }
 
-    public void setId(@NonNull String mId) {
-        this.mId = mId;
+    public void setId(@NonNull String id) {
+        mId = id;
     }
 
     public String getName() {
         return mName;
     }
 
-    public void setName(String mName) {
-        this.mName = mName;
+    public void setName(String name) {
+        mName = name;
     }
 
-    public String getPresidentUserId() {
-        return mPresidentUserId;
+    public String getCompanyId() {
+        return mCompanyId;
     }
 
-    public void setPresidentUserId(String mPresidentUserId) {
-        this.mPresidentUserId = mPresidentUserId;
+    public void setCompanyId(String companyId) {
+        mCompanyId = companyId;
     }
-
 }

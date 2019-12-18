@@ -1,7 +1,9 @@
 package com.virtaandroidbuddy.api.model;
 
 
-public class UnitListDataJson {
+import java.io.Serializable;
+
+public class UnitListDataJson implements Serializable {
     private String mId;
     private String mName;
     private String mUnitTypeId;

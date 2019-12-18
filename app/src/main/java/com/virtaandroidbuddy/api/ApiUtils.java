@@ -8,10 +8,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.virtaandroidbuddy.api.deserializer.CompanyJsonDeserializer;
 import com.virtaandroidbuddy.api.deserializer.UnitListJsonDeserializer;
+import com.virtaandroidbuddy.api.deserializer.UnitSummaryJsonDeserializer;
 import com.virtaandroidbuddy.api.interceptor.AddCookiesInterceptor;
 import com.virtaandroidbuddy.api.interceptor.ReceivedCookiesInterceptor;
 import com.virtaandroidbuddy.api.model.CompanyJson;
 import com.virtaandroidbuddy.api.model.UnitListJson;
+import com.virtaandroidbuddy.api.model.UnitSummaryJson;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -53,6 +55,7 @@ public class ApiUtils {
             final Gson gson = new GsonBuilder()
                     .registerTypeAdapter(CompanyJson.class, new CompanyJsonDeserializer())
                     .registerTypeAdapter(UnitListJson.class, new UnitListJsonDeserializer())
+                    .registerTypeAdapter(UnitSummaryJson.class, new UnitSummaryJsonDeserializer())
                     .create();
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
