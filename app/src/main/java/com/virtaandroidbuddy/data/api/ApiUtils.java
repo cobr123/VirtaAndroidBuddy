@@ -1,4 +1,4 @@
-package com.virtaandroidbuddy.api;
+package com.virtaandroidbuddy.data.api;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,14 +6,14 @@ import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.virtaandroidbuddy.api.deserializer.CompanyJsonDeserializer;
-import com.virtaandroidbuddy.api.deserializer.UnitListJsonDeserializer;
-import com.virtaandroidbuddy.api.deserializer.UnitSummaryJsonDeserializer;
-import com.virtaandroidbuddy.api.interceptor.AddCookiesInterceptor;
-import com.virtaandroidbuddy.api.interceptor.ReceivedCookiesInterceptor;
-import com.virtaandroidbuddy.api.model.CompanyJson;
-import com.virtaandroidbuddy.api.model.UnitListJson;
-import com.virtaandroidbuddy.api.model.UnitSummaryJson;
+import com.virtaandroidbuddy.data.api.deserializer.CompanyJsonDeserializer;
+import com.virtaandroidbuddy.data.api.deserializer.UnitListJsonDeserializer;
+import com.virtaandroidbuddy.data.api.deserializer.UnitSummaryJsonDeserializer;
+import com.virtaandroidbuddy.data.api.interceptor.AddCookiesInterceptor;
+import com.virtaandroidbuddy.data.api.interceptor.ReceivedCookiesInterceptor;
+import com.virtaandroidbuddy.data.api.model.CompanyJson;
+import com.virtaandroidbuddy.data.api.model.UnitListJson;
+import com.virtaandroidbuddy.data.api.model.UnitSummaryJson;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;

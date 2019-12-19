@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.room.Room;
 
-import com.virtaandroidbuddy.database.VirtonomicaDatabase;
+import com.virtaandroidbuddy.data.database.VirtonomicaDatabase;
 
 public class AppDelegate extends Application {
 

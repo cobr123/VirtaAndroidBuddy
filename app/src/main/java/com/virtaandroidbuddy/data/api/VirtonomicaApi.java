@@ -1,8 +1,8 @@
-package com.virtaandroidbuddy.api;
+package com.virtaandroidbuddy.data.api;
 
-import com.virtaandroidbuddy.api.model.CompanyJson;
-import com.virtaandroidbuddy.api.model.UnitListJson;
-import com.virtaandroidbuddy.api.model.UnitSummaryJson;
+import com.virtaandroidbuddy.data.api.model.CompanyJson;
+import com.virtaandroidbuddy.data.api.model.UnitListJson;
+import com.virtaandroidbuddy.data.api.model.UnitSummaryJson;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;

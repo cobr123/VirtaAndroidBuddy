@@ -1,12 +1,12 @@
-package com.virtaandroidbuddy.api.deserializer;
+package com.virtaandroidbuddy.data.api.deserializer;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.virtaandroidbuddy.api.model.UnitListDataJson;
-import com.virtaandroidbuddy.api.model.UnitListJson;
+import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
+import com.virtaandroidbuddy.data.api.model.UnitListJson;
 
 
 import java.lang.reflect.Type;

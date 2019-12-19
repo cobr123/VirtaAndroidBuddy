@@ -16,13 +16,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
-import com.virtaandroidbuddy.api.ApiUtils;
-import com.virtaandroidbuddy.api.VirtonomicaApi;
-import com.virtaandroidbuddy.api.model.UnitListDataJson;
-import com.virtaandroidbuddy.api.model.UnitListJson;
-import com.virtaandroidbuddy.database.VirtonomicaDao;
-import com.virtaandroidbuddy.database.model.Session;
-import com.virtaandroidbuddy.database.model.Unit;
+import com.virtaandroidbuddy.data.api.ApiUtils;
+import com.virtaandroidbuddy.data.api.VirtonomicaApi;
+import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
+import com.virtaandroidbuddy.data.api.model.UnitListJson;
+import com.virtaandroidbuddy.data.database.VirtonomicaDao;
+import com.virtaandroidbuddy.data.database.model.Session;
+import com.virtaandroidbuddy.data.database.model.Unit;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.virtaandroidbuddy.database.model;
+package com.virtaandroidbuddy.data.database.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

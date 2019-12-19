@@ -1,4 +1,4 @@
-package com.virtaandroidbuddy.api.interceptor;
+package com.virtaandroidbuddy.data.api.interceptor;
 
 import android.util.Log;
 

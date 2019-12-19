@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.virtaandroidbuddy.R;
-import com.virtaandroidbuddy.api.model.UnitListDataJson;
+import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
 
 import java.util.ArrayList;
 import java.util.List;

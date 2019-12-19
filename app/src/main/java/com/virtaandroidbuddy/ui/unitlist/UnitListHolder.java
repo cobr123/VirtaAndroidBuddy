@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.virtaandroidbuddy.R;
-import com.virtaandroidbuddy.api.model.UnitListDataJson;
+import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
 
 
 public class UnitListHolder extends RecyclerView.ViewHolder {

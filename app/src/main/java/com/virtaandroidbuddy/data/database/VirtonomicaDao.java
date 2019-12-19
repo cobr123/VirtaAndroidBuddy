@@ -1,4 +1,4 @@
-package com.virtaandroidbuddy.database;
+package com.virtaandroidbuddy.data.database;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -6,10 +6,10 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.virtaandroidbuddy.database.model.Company;
-import com.virtaandroidbuddy.database.model.Session;
-import com.virtaandroidbuddy.database.model.Unit;
-import com.virtaandroidbuddy.database.model.UnitSummary;
+import com.virtaandroidbuddy.data.database.model.Company;
+import com.virtaandroidbuddy.data.database.model.Session;
+import com.virtaandroidbuddy.data.database.model.Unit;
+import com.virtaandroidbuddy.data.database.model.UnitSummary;
 
 import java.util.List;
 

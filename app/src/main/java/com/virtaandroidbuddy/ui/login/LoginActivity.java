@@ -15,10 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
-import com.virtaandroidbuddy.api.ApiUtils;
-import com.virtaandroidbuddy.api.VirtonomicaApi;
-import com.virtaandroidbuddy.database.VirtonomicaDao;
-import com.virtaandroidbuddy.database.model.Session;
+import com.virtaandroidbuddy.data.api.ApiUtils;
+import com.virtaandroidbuddy.data.api.VirtonomicaApi;
+import com.virtaandroidbuddy.data.database.VirtonomicaDao;
+import com.virtaandroidbuddy.data.database.model.Session;
 
 import java.util.Arrays;
 import java.util.List;

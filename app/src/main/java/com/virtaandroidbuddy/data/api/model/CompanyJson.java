@@ -1,4 +1,4 @@
-package com.virtaandroidbuddy.api.model;
+package com.virtaandroidbuddy.data.api.model;
 
 import java.io.Serializable;
 
