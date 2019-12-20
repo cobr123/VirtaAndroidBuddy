@@ -18,7 +18,7 @@
             android:visibility="visible" />
 
         <include
-            layout="@layout/error_view"
+            layout="@layout/v_error"
             android:visibility="gone" />
     </FrameLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

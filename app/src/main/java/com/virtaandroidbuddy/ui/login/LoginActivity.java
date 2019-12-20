@@ -15,9 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
-import com.virtaandroidbuddy.data.api.ApiUtils;
+import com.virtaandroidbuddy.utils.ApiUtils;
 import com.virtaandroidbuddy.data.api.VirtonomicaApi;
-import com.virtaandroidbuddy.data.database.VirtonomicaDao;
 import com.virtaandroidbuddy.data.database.model.Session;
 
 import java.util.Arrays;
@@ -50,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
                 ApiUtils.setCookies(view.getContext(), null);
                 final String realm = realms.get((int) mRealmSp.getSelectedItemId());
                 try {
-                    final VirtonomicaApi api = ApiUtils.getApi(ApiUtils.getClient(view.getContext()), getString(R.string.base_url));
+                    final VirtonomicaApi api = ApiUtils.getApiService(view.getContext());
 
                     //init cookies
                     api.getCompanyInfo(realm)
@@ -66,8 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                     .observeOn(AndroidSchedulers.mainThread())
                                                                     .subscribe(companyJson -> {
                                                                                 mErrorTv.setText("");
-                                                                                VirtonomicaDao virtonomicaDao = ((AppDelegate) getApplicationContext()).getVirtonomicaDatabase().getVirtonomicaDao();
-                                                                                virtonomicaDao.insertSession(new Session(1, realm, companyJson.getId()));
+                                                                                ((AppDelegate) getApplicationContext()).getStorage().insertSession(new Session(1, realm, companyJson.getId()));
                                                                                 finish();
                                                                             },
                                                                             throwable12 -> {

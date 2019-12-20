@@ -4,23 +4,26 @@ import android.app.Application;
 
 import androidx.room.Room;
 
+import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.database.VirtonomicaDatabase;
 
 public class AppDelegate extends Application {
 
-    private VirtonomicaDatabase mVirtonomicaDatabase;
+    private Storage mStorage;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        mVirtonomicaDatabase = Room.databaseBuilder(getApplicationContext(), VirtonomicaDatabase.class, "virtonomica_database")
+        final VirtonomicaDatabase database = Room.databaseBuilder(getApplicationContext(), VirtonomicaDatabase.class, "virtonomica_database")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
+
+        mStorage = new Storage(database.getVirtonomicaDao());
     }
 
-    public VirtonomicaDatabase getVirtonomicaDatabase() {
-        return mVirtonomicaDatabase;
+    public Storage getStorage() {
+        return mStorage;
     }
 }

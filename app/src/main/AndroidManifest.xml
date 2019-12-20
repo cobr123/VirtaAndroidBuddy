@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.login.LoginActivity" />
-        <activity android:name=".ui.unitlist.UnitListActivity">
+        <activity android:name=".ui.unit.summary.UnitSummaryActivity" />
+        <activity android:name=".ui.unitlist.UnitListActivity" android:label="@string/unitlist_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

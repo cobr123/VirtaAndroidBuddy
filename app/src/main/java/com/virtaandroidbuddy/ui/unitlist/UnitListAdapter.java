@@ -16,7 +16,16 @@ import java.util.List;
 
 public class UnitListAdapter extends RecyclerView.Adapter<UnitListHolder> {
 
+    public interface OnItemClickListener {
+        void onItemClick(UnitListDataJson unit);
+    }
+    @NonNull
     private final List<UnitListDataJson> mUnitList = new ArrayList<>();
+    private final OnItemClickListener mOnItemClickListener;
+
+    public UnitListAdapter(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
+    }
 
     @NonNull
     @Override
@@ -28,7 +37,7 @@ public class UnitListAdapter extends RecyclerView.Adapter<UnitListHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull UnitListHolder holder, int position) {
-        holder.bind(mUnitList.get(position));
+        holder.bind(mUnitList.get(position), mOnItemClickListener);
     }
 
     @Override

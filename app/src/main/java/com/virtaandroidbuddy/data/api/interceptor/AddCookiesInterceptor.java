@@ -3,7 +3,7 @@ package com.virtaandroidbuddy.data.api.interceptor;
 import android.content.Context;
 import android.util.Log;
 
-import com.virtaandroidbuddy.data.api.ApiUtils;
+import com.virtaandroidbuddy.utils.ApiUtils;
 
 import org.jsoup.internal.StringUtil;
 

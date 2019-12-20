@@ -1,4 +1,4 @@
-package com.virtaandroidbuddy.data.api;
+package com.virtaandroidbuddy.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,6 +6,8 @@ import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.virtaandroidbuddy.R;
+import com.virtaandroidbuddy.data.api.VirtonomicaApi;
 import com.virtaandroidbuddy.data.api.deserializer.CompanyJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitListJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitSummaryJsonDeserializer;
@@ -67,9 +69,9 @@ public class ApiUtils {
         return retrofit;
     }
 
-    public static VirtonomicaApi getApi(OkHttpClient client, String baseUrl) {
+    public static VirtonomicaApi getApiService(Context context) {
         if (api == null) {
-            api = ApiUtils.getRetrofit(client, baseUrl).create(VirtonomicaApi.class);
+            api = ApiUtils.getRetrofit(getClient(context), context.getString(R.string.base_url)).create(VirtonomicaApi.class);
         }
         return api;
     }

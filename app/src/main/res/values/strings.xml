@@ -8,5 +8,6 @@
     <string name="base_url">https://virtonomica.ru/</string>
     <string name="error_create_company_before_login">Before login create company via web site, please.</string>
     <string name="logout">Logout</string>
-    <string name="error_please_try_again">Error. Please try again.</string>
+    <string name="error_please_try_again">Something went wrong. Please try again.</string>
+    <string name="unitlist_title">Subdivisions</string>
 </resources>

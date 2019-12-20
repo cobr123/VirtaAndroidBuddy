@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.virtaandroidbuddy.R;
-import com.virtaandroidbuddy.ui.SingleFragmentActivity;
+import com.virtaandroidbuddy.common.SingleFragmentActivity;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 
 public class UnitListActivity extends SingleFragmentActivity {

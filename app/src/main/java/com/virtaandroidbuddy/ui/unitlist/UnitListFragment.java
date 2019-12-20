@@ -1,5 +1,6 @@
 package com.virtaandroidbuddy.ui.unitlist;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,36 +13,47 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
-import com.virtaandroidbuddy.data.api.ApiUtils;
-import com.virtaandroidbuddy.data.api.VirtonomicaApi;
+import com.virtaandroidbuddy.common.RefreshOwner;
+import com.virtaandroidbuddy.common.Refreshable;
+import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
-import com.virtaandroidbuddy.data.api.model.UnitListJson;
-import com.virtaandroidbuddy.data.database.VirtonomicaDao;
+import com.virtaandroidbuddy.utils.ApiUtils;
 import com.virtaandroidbuddy.data.database.model.Session;
-import com.virtaandroidbuddy.data.database.model.Unit;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryActivity;
+import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryFragment;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.OkHttpClient;
 
 
-public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class UnitListFragment extends Fragment implements Refreshable, UnitListAdapter.OnItemClickListener {
 
-    private RecyclerView mUnitListRecyclerView;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private final UnitListAdapter mUnitListAdapter = new UnitListAdapter();
+    private RecyclerView mRecyclerView;
+    private RefreshOwner mRefreshOwner;
     private View mErrorView;
+    private Storage mStorage;
+    private UnitListAdapter mUnitListAdapter;
+    private Disposable mDisposable;
+
 
     public static UnitListFragment newInstance() {
         return new UnitListFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Storage.StorageOwner) {
+            mStorage = ((Storage.StorageOwner) context).obtainStorage();
+        }
+
+        if (context instanceof RefreshOwner) {
+            mRefreshOwner = ((RefreshOwner) context);
+        }
     }
 
     @Nullable
@@ -52,72 +64,71 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mUnitListRecyclerView = view.findViewById(R.id.recycler);
-        mSwipeRefreshLayout = view.findViewById(R.id.refresher);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mErrorView = view.findViewById(R.id.error_view);
+        mRecyclerView = view.findViewById(R.id.recycler);
+        mErrorView = view.findViewById(R.id.errorView);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mUnitListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mUnitListRecyclerView.setAdapter(mUnitListAdapter);
-        refreshData();
+
+        if (getActivity() != null) {
+            getActivity().setTitle(R.string.unitlist_title);
+        }
+
+        mUnitListAdapter = new UnitListAdapter(this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mUnitListAdapter);
+
+        onRefreshData();
     }
 
-    private void refreshData() {
-        try {
-            final OkHttpClient client = ApiUtils.getClient(getActivity());
-            final VirtonomicaApi api = ApiUtils.getApi(client, getString(R.string.base_url));
-            final VirtonomicaDao virtonomicaDao = ((AppDelegate) getActivity().getApplicationContext()).getVirtonomicaDatabase().getVirtonomicaDao();
-            final Session session = virtonomicaDao.getSession();
+    @Override
+    public void onItemClick(UnitListDataJson unit) {
+        Intent intent = new Intent(getActivity(), UnitSummaryActivity.class);
+        Bundle args = new Bundle();
+        args.putString(UnitSummaryFragment.UNIT_ID_KEY, unit.getId());
+        intent.putExtra(UnitSummaryActivity.UNIT_SUMMARY_BUNDLE_KEY, args);
+        startActivity(intent);
+    }
 
-            api.getUnitList(session.getRealm(), session.getCompanyId())
+    @Override
+    public void onDetach() {
+        mStorage = null;
+        mRefreshOwner = null;
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
+        super.onDetach();
+    }
+
+    @Override
+    public void onRefreshData() {
+        getUnitlist();
+    }
+
+    private void getUnitlist() {
+        try {
+            final Session session = mStorage.getSession();
+
+            mDisposable = ApiUtils.getApiService(getActivity()).getUnitList(session.getRealm(), session.getCompanyId())
                     .subscribeOn(Schedulers.io())
-                    .doOnSuccess(unitListJson -> {
-                        final List<UnitListDataJson> data = unitListJson.getData();
-                        final List<Unit> unitList = new ArrayList<>(data.size());
-                        for (UnitListDataJson item : data) {
-                            final Unit unit = new Unit();
-                            unit.setCompanyId(session.getCompanyId());
-                            unit.setId(item.getId());
-                            unit.setRealm(session.getRealm());
-                            unit.setName(item.getName());
-                            unitList.add(unit);
-                        }
-                        virtonomicaDao.insertUnits(unitList);
-                    })
-                    .onErrorReturn(throwable -> {
-                        if (ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())) {
-                            final List<Unit> unitList = virtonomicaDao.getUnitList(session.getRealm(), session.getCompanyId());
-                            final List<UnitListDataJson> data = new ArrayList<>(unitList.size());
-                            for (Unit unit : unitList) {
-                                final UnitListDataJson dataItem = new UnitListDataJson();
-                                dataItem.setId(unit.getId());
-                                dataItem.setName(unit.getName());
-                                data.add(dataItem);
-                            }
-                            final UnitListJson unitListJson = new UnitListJson();
-                            unitListJson.setData(data);
-                            return unitListJson;
-                        } else {
-                            return null;
-                        }
-                    })
+                    .doOnSuccess(response -> mStorage.insertUnits(response, session))
+                    .onErrorReturn(throwable ->
+                            ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass()) ? mStorage.getUnitList(session) : null)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposable -> mSwipeRefreshLayout.setRefreshing(true))
-                    .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+                    .doOnSubscribe(disposable -> mRefreshOwner.setRefreshState(true))
+                    .doFinally(() -> mRefreshOwner.setRefreshState(false))
                     .subscribe(unitListJson -> {
                                 mErrorView.setVisibility(View.GONE);
-                                mUnitListRecyclerView.setVisibility(View.VISIBLE);
+                                mRecyclerView.setVisibility(View.VISIBLE);
                                 mUnitListAdapter.addData(unitListJson.getData(), true);
                             },
                             throwable -> {
                                 mErrorView.setVisibility(View.VISIBLE);
-                                mUnitListRecyclerView.setVisibility(View.GONE);
+                                mRecyclerView.setVisibility(View.GONE);
                                 Log.e("VirtonomicaApi", throwable.toString(), throwable);
-                                virtonomicaDao.deleteSession(session);
+                                mStorage.deleteSession(session);
                                 showLoginWindow(throwable.toString());
                             });
         } catch (Exception e) {
@@ -138,7 +149,7 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_LOGIN:
-                refreshData();
+                onRefreshData();
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
@@ -146,8 +157,4 @@ public class UnitListFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
     }
 
-    @Override
-    public void onRefresh() {
-        mSwipeRefreshLayout.post(this::refreshData);
-    }
 }

@@ -22,8 +22,12 @@ public class UnitListHolder extends RecyclerView.ViewHolder {
         mId = itemView.findViewById(R.id.tv_id);
     }
 
-    public void bind(UnitListDataJson unit) {
+    public void bind(UnitListDataJson unit, UnitListAdapter.OnItemClickListener onItemClickListener) {
         mName.setText(unit.getName());
         mId.setText(unit.getId());
+
+        if (onItemClickListener != null) {
+            itemView.setOnClickListener(v -> onItemClickListener.onItemClick(unit));
+        }
     }
 }
