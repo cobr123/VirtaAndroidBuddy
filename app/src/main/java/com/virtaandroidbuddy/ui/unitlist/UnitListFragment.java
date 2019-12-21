@@ -10,34 +10,29 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.virtaandroidbuddy.R;
+import com.virtaandroidbuddy.common.PresenterFragment;
 import com.virtaandroidbuddy.common.RefreshOwner;
 import com.virtaandroidbuddy.common.Refreshable;
 import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
-import com.virtaandroidbuddy.utils.ApiUtils;
-import com.virtaandroidbuddy.data.database.model.Session;
+import com.virtaandroidbuddy.data.api.model.UnitListJson;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryActivity;
 import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryFragment;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
-
-public class UnitListFragment extends Fragment implements Refreshable, UnitListAdapter.OnItemClickListener {
+public class UnitListFragment extends PresenterFragment<UnitListPresenter> implements UnitListView, Refreshable, UnitListAdapter.OnItemClickListener {
 
     private RecyclerView mRecyclerView;
     private RefreshOwner mRefreshOwner;
     private View mErrorView;
     private Storage mStorage;
     private UnitListAdapter mUnitListAdapter;
-    private Disposable mDisposable;
+    private UnitListPresenter mPresenter;
 
 
     public static UnitListFragment newInstance() {
@@ -76,6 +71,7 @@ public class UnitListFragment extends Fragment implements Refreshable, UnitListA
             getActivity().setTitle(R.string.unitlist_title);
         }
 
+        mPresenter = new UnitListPresenter(this, mStorage);
         mUnitListAdapter = new UnitListAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mUnitListAdapter);
@@ -84,58 +80,32 @@ public class UnitListFragment extends Fragment implements Refreshable, UnitListA
     }
 
     @Override
-    public void onItemClick(UnitListDataJson unit) {
-        Intent intent = new Intent(getActivity(), UnitSummaryActivity.class);
-        Bundle args = new Bundle();
-        args.putString(UnitSummaryFragment.UNIT_ID_KEY, unit.getId());
-        intent.putExtra(UnitSummaryActivity.UNIT_SUMMARY_BUNDLE_KEY, args);
-        startActivity(intent);
+    public void onItemClick(UnitListDataJson unitListDataJson) {
+        mPresenter.openUnitSummary(unitListDataJson);
+    }
+
+    @Override
+    protected UnitListPresenter getPresenter() {
+        return mPresenter;
     }
 
     @Override
     public void onDetach() {
         mStorage = null;
         mRefreshOwner = null;
-        if (mDisposable != null) {
-            mDisposable.dispose();
-        }
         super.onDetach();
     }
 
     @Override
     public void onRefreshData() {
-        getUnitlist();
-    }
-
-    private void getUnitlist() {
         try {
-            final Session session = mStorage.getSession();
-
-            mDisposable = ApiUtils.getApiService(getActivity()).getUnitList(session.getRealm(), session.getCompanyId())
-                    .subscribeOn(Schedulers.io())
-                    .doOnSuccess(response -> mStorage.insertUnits(response, session))
-                    .onErrorReturn(throwable ->
-                            ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass()) ? mStorage.getUnitList(session) : null)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposable -> mRefreshOwner.setRefreshState(true))
-                    .doFinally(() -> mRefreshOwner.setRefreshState(false))
-                    .subscribe(unitListJson -> {
-                                mErrorView.setVisibility(View.GONE);
-                                mRecyclerView.setVisibility(View.VISIBLE);
-                                mUnitListAdapter.addData(unitListJson.getData(), true);
-                            },
-                            throwable -> {
-                                mErrorView.setVisibility(View.VISIBLE);
-                                mRecyclerView.setVisibility(View.GONE);
-                                Log.e("VirtonomicaApi", throwable.toString(), throwable);
-                                mStorage.deleteSession(session);
-                                showLoginWindow(throwable.toString());
-                            });
+            mPresenter.getUnitlist(getActivity());
         } catch (Exception e) {
             Log.e("VirtonomicaApi", e.toString());
             showLoginWindow(null);
         }
     }
+
 
     private final int REQUEST_CODE_LOGIN = 1;
 
@@ -157,4 +127,37 @@ public class UnitListFragment extends Fragment implements Refreshable, UnitListA
         }
     }
 
+    @Override
+    public void showUnitList(UnitListJson unitListJson) {
+        mErrorView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mUnitListAdapter.addData(unitListJson.getData(), true);
+    }
+
+    @Override
+    public void openUnitSummary(UnitListDataJson unitListDataJson) {
+        Intent intent = new Intent(getActivity(), UnitSummaryActivity.class);
+        Bundle args = new Bundle();
+        args.putString(UnitSummaryFragment.UNIT_ID_KEY, unitListDataJson.getId());
+        intent.putExtra(UnitSummaryActivity.UNIT_SUMMARY_BUNDLE_KEY, args);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showLoading() {
+        mRefreshOwner.setRefreshState(true);
+    }
+
+    @Override
+    public void hideLoading() {
+        mRefreshOwner.setRefreshState(false);
+    }
+
+    @Override
+    public void showError(Throwable throwable) {
+//        mErrorView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+        Log.e("VirtonomicaApi", throwable.toString(), throwable);
+        showLoginWindow(throwable.toString());
+    }
 }

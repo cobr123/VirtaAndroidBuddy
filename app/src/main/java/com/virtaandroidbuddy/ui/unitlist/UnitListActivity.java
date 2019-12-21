@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.common.SingleFragmentActivity;
+import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 
 public class UnitListActivity extends SingleFragmentActivity {
@@ -30,6 +31,8 @@ public class UnitListActivity extends SingleFragmentActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.actionLogout:
+                final Storage storage = obtainStorage();
+                storage.deleteSession(storage.getSession());
                 final Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 break;

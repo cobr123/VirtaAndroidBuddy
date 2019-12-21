@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -33,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private Spinner mRealmSp;
     private Button mLoginBtn;
     private TextView mErrorTv;
+    private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     final List<String> realms = Arrays.asList("vera", "olga", "anna", "lien", "mary", "nika", "fast");
 
@@ -52,31 +54,38 @@ public class LoginActivity extends AppCompatActivity {
                     final VirtonomicaApi api = ApiUtils.getApiService(view.getContext());
 
                     //init cookies
-                    api.getCompanyInfo(realm)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(companyJson -> Log.d("VirtonomicaApi", "accept init cookies"),
-                                    throwable ->
-                                            api.login(realm, login, password, "ru")
-                                                    .subscribeOn(Schedulers.io())
-                                                    .observeOn(AndroidSchedulers.mainThread())
-                                                    .subscribe(() -> api.getCompanyInfo(realm)
-                                                                    .subscribeOn(Schedulers.io())
-                                                                    .observeOn(AndroidSchedulers.mainThread())
-                                                                    .subscribe(companyJson -> {
-                                                                                mErrorTv.setText("");
-                                                                                ((AppDelegate) getApplicationContext()).getStorage().insertSession(new Session(1, realm, companyJson.getId()));
-                                                                                finish();
-                                                                            },
-                                                                            throwable12 -> {
-                                                                                Log.e("VirtonomicaApi", throwable12.toString(), throwable12);
-                                                                                mErrorTv.setText(getString(R.string.error_create_company_before_login));
-                                                                            }),
-                                                            throwable1 -> {
-                                                                Log.e("VirtonomicaApi", throwable1.toString(), throwable1);
-                                                                mErrorTv.setText(throwable1.toString());
-                                                            }));
+                    mCompositeDisposable.add(
+                            api.getCompanyInfo(realm)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(companyJson -> {
+                                                mErrorTv.setText("");
+                                                ((AppDelegate) getApplicationContext()).getStorage().insertSession(new Session(1, realm, companyJson.getId()));
+                                                finish();
+                                            },
+                                            throwable -> mCompositeDisposable.add(
+                                                    api.login(realm, login, password, "ru")
+                                                            .subscribeOn(Schedulers.io())
+                                                            .observeOn(AndroidSchedulers.mainThread())
+                                                            .subscribe(() -> mCompositeDisposable.add(
+                                                                    api.getCompanyInfo(realm)
+                                                                            .subscribeOn(Schedulers.io())
+                                                                            .observeOn(AndroidSchedulers.mainThread())
+                                                                            .subscribe(companyJson2 -> {
+                                                                                        mErrorTv.setText("");
+                                                                                        ((AppDelegate) getApplicationContext()).getStorage().insertSession(new Session(1, realm, companyJson2.getId()));
+                                                                                        finish();
+                                                                                    },
+                                                                                    throwable12 -> {
+                                                                                        Log.e("VirtonomicaApi", throwable12.toString(), throwable12);
+                                                                                        mErrorTv.setText(getString(R.string.error_create_company_before_login));
+                                                                                    })),
+                                                                    throwable1 -> {
+                                                                        Log.e("VirtonomicaApi", throwable1.toString(), throwable1);
+                                                                        mErrorTv.setText(throwable1.toString());
+                                                                    }))));
                 } catch (Throwable t) {
+                    mCompositeDisposable.clear();
                     Log.e("VirtonomicaApi", t.toString());
                     mErrorTv.setText(t.toString());
                 }
@@ -122,4 +131,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStop() {
+        mCompositeDisposable.clear();
+        super.onStop();
+    }
 }
