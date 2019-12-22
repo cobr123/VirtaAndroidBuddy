@@ -1,7 +1,9 @@
 package com.virtaandroidbuddy.ui.unit.summary;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,22 +11,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.virtaandroidbuddy.R;
+import com.virtaandroidbuddy.common.PresenterFragment;
 import com.virtaandroidbuddy.common.RefreshOwner;
 import com.virtaandroidbuddy.common.Refreshable;
 import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.api.model.UnitSummaryJson;
-import com.virtaandroidbuddy.data.database.model.Session;
-import com.virtaandroidbuddy.data.database.model.UnitSummary;
-import com.virtaandroidbuddy.utils.ApiUtils;
+import com.virtaandroidbuddy.ui.login.LoginActivity;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-
-public class UnitSummaryFragment extends Fragment implements Refreshable {
+public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter> implements UnitSummaryView, Refreshable {
 
     public static final String UNIT_ID_KEY = "UNIT_ID_KEY";
 
@@ -33,7 +29,7 @@ public class UnitSummaryFragment extends Fragment implements Refreshable {
     private View mUnitSummaryView;
     private String mUnitId;
     private Storage mStorage;
-    private Disposable mDisposable;
+    private UnitSummaryPresenter mPresenter;
 
     private TextView mUnitSummaryId;
     private TextView mUnitSummaryName;
@@ -80,6 +76,7 @@ public class UnitSummaryFragment extends Fragment implements Refreshable {
             getActivity().setTitle(mUnitId);
         }
 
+        mPresenter = new UnitSummaryPresenter(this, mStorage);
         mUnitSummaryView.setVisibility(View.VISIBLE);
 
         onRefreshData();
@@ -87,31 +84,12 @@ public class UnitSummaryFragment extends Fragment implements Refreshable {
 
     @Override
     public void onRefreshData() {
-        getUnitSummary();
-    }
-
-    private void getUnitSummary() {
-        final Session session = mStorage.getSession();
-        mDisposable = ApiUtils.getApiService(getContext()).getUnitSummary(session.getRealm(), mUnitId)
-                .subscribeOn(Schedulers.io())
-                .doOnSuccess(response -> mStorage.insertUnitSummary(response, session))
-                .onErrorReturn(throwable ->
-                        ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass()) ?
-                                mStorage.getUnitSummary(mUnitId, session) :
-                                null)
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> mRefreshOwner.setRefreshState(true))
-                .doFinally(() -> mRefreshOwner.setRefreshState(false))
-                .subscribe(
-                        response -> {
-                            mErrorView.setVisibility(View.GONE);
-                            mUnitSummaryView.setVisibility(View.VISIBLE);
-                            bind(response);
-                        },
-                        throwable -> {
-                            mErrorView.setVisibility(View.VISIBLE);
-                            mUnitSummaryView.setVisibility(View.GONE);
-                        });
+        try {
+            mPresenter.getUnitSummary(getActivity(), mUnitId);
+        } catch (Exception e) {
+            Log.e("VirtonomicaApi", e.toString());
+            showLoginWindow(null);
+        }
     }
 
     private void bind(UnitSummaryJson unitSummaryJson) {
@@ -120,12 +98,60 @@ public class UnitSummaryFragment extends Fragment implements Refreshable {
     }
 
     @Override
+    protected UnitSummaryPresenter getPresenter() {
+        return mPresenter;
+    }
+
+    @Override
     public void onDetach() {
         mStorage = null;
         mRefreshOwner = null;
-        if (mDisposable != null) {
-            mDisposable.dispose();
-        }
         super.onDetach();
+    }
+
+    @Override
+    public void showLoading() {
+        mRefreshOwner.setRefreshState(true);
+    }
+
+    @Override
+    public void hideLoading() {
+        mRefreshOwner.setRefreshState(false);
+    }
+
+
+    @Override
+    public void showUnitSummary(UnitSummaryJson unitSummaryJson) {
+        mErrorView.setVisibility(View.GONE);
+        mUnitSummaryView.setVisibility(View.VISIBLE);
+        bind(unitSummaryJson);
+    }
+
+    @Override
+    public void showError(Throwable throwable) {
+        mErrorView.setVisibility(View.VISIBLE);
+        mUnitSummaryView.setVisibility(View.GONE);
+        Log.e("VirtonomicaApi", throwable.toString(), throwable);
+        //showLoginWindow(throwable.toString());
+    }
+
+    private final int REQUEST_CODE_LOGIN = 1;
+
+    private void showLoginWindow(final String error) {
+        final Intent intent = new Intent(getActivity(), LoginActivity.class);
+        intent.putExtra(LoginActivity.ERROR_TEXT_PROP_NAME, error);
+        startActivityForResult(intent, REQUEST_CODE_LOGIN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_LOGIN:
+                onRefreshData();
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
     }
 }
