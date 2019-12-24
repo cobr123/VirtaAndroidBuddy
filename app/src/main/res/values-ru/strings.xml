@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VirtaAndroidBuddy</string>
+    <string name="error_password_required">Пароль обязателен</string>
+    <string name="error_login_required">Логин обязателен</string>
+    <string name="btn_text_login">Войти</string>
+    <string name="hint_login">логин</string>
+    <string name="hint_password">пароль</string>
+    <string name="base_url">https://virtonomica.ru/</string>
+    <string name="error_create_company_before_login">Перед логином создайте компанию через сайт, пожалуйста.</string>
+    <string name="logout">Выйти</string>
+    <string name="error_please_try_again">Что-то пошло не так. Попробуйте снова.</string>
+    <string name="unitlist_title">Подразделения</string>
+    <string name="game_update_happening_now">Ой! Идёт пересчёт игровой ситуации.\nВсё в порядке, просто на выбранном реалме идёт пересчёт. Нашим серверам нужно время, чтобы обработать действия игроков и обновить экономическую ситуацию в мире Виртономики.</string>
+</resources>
