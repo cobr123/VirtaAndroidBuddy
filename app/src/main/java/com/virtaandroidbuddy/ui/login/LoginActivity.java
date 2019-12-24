@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
+import com.virtaandroidbuddy.data.api.GameUpdateHappeningNowException;
 import com.virtaandroidbuddy.utils.ApiUtils;
 import com.virtaandroidbuddy.data.api.VirtonomicaApi;
 import com.virtaandroidbuddy.data.database.model.Session;
@@ -28,6 +29,8 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class LoginActivity extends AppCompatActivity {
+
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     private EditText mLoginEd;
     private EditText mPasswordEd;
@@ -77,16 +80,26 @@ public class LoginActivity extends AppCompatActivity {
                                                                                         finish();
                                                                                     },
                                                                                     throwable12 -> {
-                                                                                        Log.e("VirtonomicaApi", throwable12.toString(), throwable12);
-                                                                                        mErrorTv.setText(getString(R.string.error_create_company_before_login));
+                                                                                        mCompositeDisposable.clear();
+                                                                                        Log.e(TAG + ".getCompanyInfo2", throwable12.toString(), throwable12);
+                                                                                        if (throwable12 instanceof GameUpdateHappeningNowException) {
+                                                                                            mErrorTv.setText(getString(R.string.game_update_happening_now));
+                                                                                        } else {
+                                                                                            mErrorTv.setText(getString(R.string.error_create_company_before_login));
+                                                                                        }
                                                                                     })),
                                                                     throwable1 -> {
-                                                                        Log.e("VirtonomicaApi", throwable1.toString(), throwable1);
-                                                                        mErrorTv.setText(throwable1.toString());
+                                                                        mCompositeDisposable.clear();
+                                                                        Log.e(TAG + ".login", throwable1.toString(), throwable1);
+                                                                        if (throwable1 instanceof GameUpdateHappeningNowException) {
+                                                                            mErrorTv.setText(getString(R.string.game_update_happening_now));
+                                                                        } else {
+                                                                            mErrorTv.setText(throwable1.toString());
+                                                                        }
                                                                     }))));
                 } catch (Throwable t) {
                     mCompositeDisposable.clear();
-                    Log.e("VirtonomicaApi", t.toString());
+                    Log.e(TAG + ".onClick", t.toString());
                     mErrorTv.setText(t.toString());
                 }
             }

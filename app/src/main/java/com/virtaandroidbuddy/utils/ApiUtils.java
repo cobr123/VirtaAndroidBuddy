@@ -12,6 +12,7 @@ import com.virtaandroidbuddy.data.api.deserializer.CompanyJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitListJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitSummaryJsonDeserializer;
 import com.virtaandroidbuddy.data.api.interceptor.AddCookiesInterceptor;
+import com.virtaandroidbuddy.data.api.interceptor.GameUpdateHappeningNowInterceptor;
 import com.virtaandroidbuddy.data.api.interceptor.ReceivedCookiesInterceptor;
 import com.virtaandroidbuddy.data.api.model.CompanyJson;
 import com.virtaandroidbuddy.data.api.model.UnitListJson;
@@ -46,6 +47,7 @@ public class ApiUtils {
             client = new OkHttpClient.Builder()
                     .addInterceptor(new AddCookiesInterceptor(appContext))
                     .addInterceptor(new ReceivedCookiesInterceptor(appContext))
+                    .addInterceptor(new GameUpdateHappeningNowInterceptor())
                     //.addInterceptor(new LoggingInterceptor())
                     .build();
         }
@@ -97,7 +99,7 @@ public class ApiUtils {
     static private final String PREF_COOKIES_KEY = "PREF_COOKIES";
 
     public static Set<String> getCookies(Context context) {
-        return getSharedPreferences(context).getStringSet(PREF_COOKIES_KEY, new HashSet<String>());
+        return getSharedPreferences(context).getStringSet(PREF_COOKIES_KEY, new HashSet<>());
     }
 
     public static void setCookies(Context context, Set<String> cookies) {

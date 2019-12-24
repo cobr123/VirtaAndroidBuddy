@@ -15,6 +15,9 @@ import okhttp3.Interceptor;
 import okhttp3.Response;
 
 public class ReceivedCookiesInterceptor implements Interceptor {
+
+    private static final String TAG = ReceivedCookiesInterceptor.class.getSimpleName();
+
     private final Context context;
 
     public ReceivedCookiesInterceptor(final Context context) {
@@ -27,7 +30,7 @@ public class ReceivedCookiesInterceptor implements Interceptor {
 
         if (!originalResponse.headers("Set-Cookie").isEmpty()) {
             final Set<String> cookies = new HashSet<>(originalResponse.headers("Set-Cookie"));
-            Log.d("VirtonomicaApi.SCookie", cookies.toString());
+            Log.d(TAG, cookies.toString());
             final Map<String, String> cookieMap = new HashMap<>();
             for (String cookieLine : cookies) {
                 for (String keyValue : cookieLine.split(";")) {

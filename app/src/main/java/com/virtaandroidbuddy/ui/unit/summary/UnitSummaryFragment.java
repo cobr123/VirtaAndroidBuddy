@@ -17,10 +17,13 @@ import com.virtaandroidbuddy.common.PresenterFragment;
 import com.virtaandroidbuddy.common.RefreshOwner;
 import com.virtaandroidbuddy.common.Refreshable;
 import com.virtaandroidbuddy.data.Storage;
+import com.virtaandroidbuddy.data.api.GameUpdateHappeningNowException;
 import com.virtaandroidbuddy.data.api.model.UnitSummaryJson;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 
 public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter> implements UnitSummaryView, Refreshable {
+
+    private static final String TAG = UnitSummaryFragment.class.getSimpleName();
 
     public static final String UNIT_ID_KEY = "UNIT_ID_KEY";
 
@@ -87,7 +90,7 @@ public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter>
         try {
             mPresenter.getUnitSummary(getActivity(), mUnitId);
         } catch (Exception e) {
-            Log.e("VirtonomicaApi", e.toString());
+            Log.e(TAG, e.toString());
             showLoginWindow(null);
         }
     }
@@ -131,8 +134,11 @@ public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter>
     public void showError(Throwable throwable) {
         mErrorView.setVisibility(View.VISIBLE);
         mUnitSummaryView.setVisibility(View.GONE);
-        Log.e("VirtonomicaApi", throwable.toString(), throwable);
+        Log.e(TAG, throwable.toString(), throwable);
         //showLoginWindow(throwable.toString());
+        if (throwable instanceof GameUpdateHappeningNowException) {
+            showLoginWindow(getString(R.string.game_update_happening_now));
+        }
     }
 
     private final int REQUEST_CODE_LOGIN = 1;

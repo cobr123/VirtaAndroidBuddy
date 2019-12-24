@@ -19,6 +19,8 @@ import okhttp3.Response;
  * Your implementation on how to get the Preferences may ary, but this will work 99% of the time.
  */
 public class AddCookiesInterceptor implements Interceptor {
+    private static final String TAG = AddCookiesInterceptor.class.getSimpleName();
+
     private final Context context;
 
     public AddCookiesInterceptor(final Context context) {
@@ -27,12 +29,12 @@ public class AddCookiesInterceptor implements Interceptor {
 
     @Override
     public Response intercept(final Interceptor.Chain chain) throws IOException {
-        Log.d("VirtonomicaApi", chain.request().url().toString());
+        Log.d(TAG, chain.request().url().toString());
         final Request.Builder builder = chain.request().newBuilder();
 
         final Set<String> preferences = ApiUtils.getCookies(context);
 
-        Log.d("VirtonomicaApi.ACookie", preferences.toString());
+        Log.d(TAG, preferences.toString());
         if (!preferences.isEmpty()) {
             builder.addHeader("Cookie", StringUtil.join(preferences, "; "));
         }

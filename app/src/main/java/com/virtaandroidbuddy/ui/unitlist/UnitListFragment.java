@@ -18,6 +18,7 @@ import com.virtaandroidbuddy.common.PresenterFragment;
 import com.virtaandroidbuddy.common.RefreshOwner;
 import com.virtaandroidbuddy.common.Refreshable;
 import com.virtaandroidbuddy.data.Storage;
+import com.virtaandroidbuddy.data.api.GameUpdateHappeningNowException;
 import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
 import com.virtaandroidbuddy.data.api.model.UnitListJson;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
@@ -27,13 +28,14 @@ import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryFragment;
 
 public class UnitListFragment extends PresenterFragment<UnitListPresenter> implements UnitListView, Refreshable, UnitListAdapter.OnItemClickListener {
 
+    private static final String TAG = UnitListFragment.class.getSimpleName();
+
     private RecyclerView mRecyclerView;
     private RefreshOwner mRefreshOwner;
     private View mErrorView;
     private Storage mStorage;
     private UnitListAdapter mUnitListAdapter;
     private UnitListPresenter mPresenter;
-
 
     public static UnitListFragment newInstance() {
         return new UnitListFragment();
@@ -101,7 +103,7 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
         try {
             mPresenter.getUnitlist(getActivity());
         } catch (Exception e) {
-            Log.e("VirtonomicaApi", e.toString());
+            Log.e(TAG, e.toString());
             showLoginWindow(null);
         }
     }
@@ -157,7 +159,11 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
     public void showError(Throwable throwable) {
 //        mErrorView.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
-        Log.e("VirtonomicaApi", throwable.toString(), throwable);
-        showLoginWindow(throwable.toString());
+        Log.e(TAG, throwable.toString(), throwable);
+        if (throwable instanceof GameUpdateHappeningNowException) {
+            showLoginWindow(getString(R.string.game_update_happening_now));
+        } else {
+            showLoginWindow(throwable.toString());
+        }
     }
 }
