@@ -162,6 +162,8 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
         Log.e(TAG, throwable.toString(), throwable);
         if (throwable instanceof GameUpdateHappeningNowException) {
             showLoginWindow(getString(R.string.game_update_happening_now));
+        } else if (throwable instanceof NullPointerException) {
+            showLoginWindow(null);
         } else {
             showLoginWindow(throwable.toString());
         }

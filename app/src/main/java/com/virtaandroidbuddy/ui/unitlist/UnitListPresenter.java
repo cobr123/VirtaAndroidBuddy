@@ -28,8 +28,13 @@ public class UnitListPresenter extends BasePresenter {
         mCompositeDisposable.add(ApiUtils.getApiService(context).getUnitList(session.getRealm(), session.getCompanyId())
                 .subscribeOn(Schedulers.io())
                 .doOnSuccess(response -> mStorage.insertUnits(response, session))
-                .onErrorReturn(throwable ->
-                        ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass()) ? mStorage.getUnitList(session) : null)
+                .onErrorReturn(throwable -> {
+                    if (ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())) {
+                        return mStorage.getUnitList(session);
+                    } else {
+                        throw new Exception(throwable);
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> mView.showLoading())
                 .doFinally(() -> mView.hideLoading())
