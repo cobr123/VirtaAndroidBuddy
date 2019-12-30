@@ -17,7 +17,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.common.PresenterFragment;
-import com.virtaandroidbuddy.common.Refreshable;
 import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.api.GameUpdateHappeningNowException;
 import com.virtaandroidbuddy.data.api.SessionExpiredException;
