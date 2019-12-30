@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(companyJson -> {
                                                 mErrorTv.setText("");
-                                                ((AppDelegate) getApplicationContext()).getStorage().insertSession(new Session(1, realm, companyJson.getId()));
+                                                ((AppDelegate) getApplicationContext()).getStorage().insertSession(new Session(1, realm, companyJson.getId(), companyJson.getName()));
                                                 finish();
                                             },
                                             throwable -> mCompositeDisposable.add(
@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                             .observeOn(AndroidSchedulers.mainThread())
                                                                             .subscribe(companyJson2 -> {
                                                                                         mErrorTv.setText("");
-                                                                                        ((AppDelegate) getApplicationContext()).getStorage().insertSession(new Session(1, realm, companyJson2.getId()));
+                                                                                        ((AppDelegate) getApplicationContext()).getStorage().insertSession(new Session(1, realm, companyJson2.getId(), companyJson2.getName()));
                                                                                         finish();
                                                                                     },
                                                                                     throwable12 -> {

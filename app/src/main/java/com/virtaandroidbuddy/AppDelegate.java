@@ -17,7 +17,6 @@ public class AppDelegate extends Application {
 
         final VirtonomicaDatabase database = Room.databaseBuilder(getApplicationContext(), VirtonomicaDatabase.class, "virtonomica_database")
                 .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
                 .build();
 
         mStorage = new Storage(database.getVirtonomicaDao());

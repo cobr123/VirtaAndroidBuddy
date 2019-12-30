@@ -12,10 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.common.PresenterFragment;
-import com.virtaandroidbuddy.common.RefreshOwner;
 import com.virtaandroidbuddy.common.Refreshable;
 import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.api.GameUpdateHappeningNowException;
@@ -29,31 +30,21 @@ import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryFragment;
 import io.reactivex.exceptions.CompositeException;
 
 
-public class UnitListFragment extends PresenterFragment<UnitListPresenter> implements UnitListView, Refreshable, UnitListAdapter.OnItemClickListener {
+public class UnitListFragment extends PresenterFragment<UnitListPresenter> implements UnitListView, UnitListAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = UnitListFragment.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
-    private RefreshOwner mRefreshOwner;
     private View mErrorView;
     private Storage mStorage;
     private UnitListAdapter mUnitListAdapter;
     private UnitListPresenter mPresenter;
-
-    public static UnitListFragment newInstance() {
-        return new UnitListFragment();
-    }
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof Storage.StorageOwner) {
-            mStorage = ((Storage.StorageOwner) context).obtainStorage();
-        }
-
-        if (context instanceof RefreshOwner) {
-            mRefreshOwner = ((RefreshOwner) context);
-        }
+        mStorage = ((AppDelegate) getActivity().getApplicationContext()).getStorage();
     }
 
     @Nullable
@@ -64,6 +55,8 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        mSwipeRefreshLayout = view.findViewById(R.id.refresher);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         mRecyclerView = view.findViewById(R.id.recycler);
         mErrorView = view.findViewById(R.id.errorView);
     }
@@ -81,7 +74,7 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mUnitListAdapter);
 
-        onRefreshData();
+        onRefresh();
     }
 
     @Override
@@ -97,12 +90,11 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
     @Override
     public void onDetach() {
         mStorage = null;
-        mRefreshOwner = null;
         super.onDetach();
     }
 
     @Override
-    public void onRefreshData() {
+    public void onRefresh() {
         try {
             mPresenter.getUnitlist(getActivity());
         } catch (Exception e) {
@@ -124,7 +116,7 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_LOGIN:
-                onRefreshData();
+                onRefresh();
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
@@ -150,12 +142,12 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
 
     @Override
     public void showLoading() {
-        mRefreshOwner.setRefreshState(true);
+        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(true));
     }
 
     @Override
     public void hideLoading() {
-        mRefreshOwner.setRefreshState(false);
+        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(false));
     }
 
     @Override

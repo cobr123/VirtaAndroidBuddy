@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_unitlist">
+
+    <fragment
+        android:id="@+id/nav_unitlist"
+        android:name="com.virtaandroidbuddy.ui.unitlist.UnitListFragment"
+        android:label="@string/unitlist_title" />
+
+    <fragment
+        android:id="@+id/nav_knowledge"
+        android:name="com.virtaandroidbuddy.ui.knowledge.KnowledgeFragment"
+        android:label="@string/knowledge_title" />
+
+</navigation>

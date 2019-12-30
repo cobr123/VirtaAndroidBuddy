@@ -11,5 +11,8 @@
     <string name="logout">Выйти</string>
     <string name="error_please_try_again">Что-то пошло не так. Попробуйте снова.</string>
     <string name="unitlist_title">Подразделения</string>
+    <string name="knowledge_title">Квалификация</string>
     <string name="game_update_happening_now">Ой! Идёт пересчёт игровой ситуации.\nВсё в порядке, просто на выбранном реалме идёт пересчёт. Нашим серверам нужно время, чтобы обработать действия игроков и обновить экономическую ситуацию в мире Виртономики.</string>
+    <string name="nav_header_title">Наименование компании</string>
+    <string name="nav_header_subtitle">Наименование реалма</string>
 </resources>

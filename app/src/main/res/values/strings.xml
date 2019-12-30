@@ -2,13 +2,16 @@
     <string name="app_name">VirtaAndroidBuddy</string>
     <string name="error_password_required">Password required</string>
     <string name="error_login_required">Login required</string>
-    <string name="btn_text_login">Login</string>
+    <string name="btn_text_login">Sign in</string>
     <string name="hint_login">login</string>
     <string name="hint_password">password</string>
     <string name="base_url">https://virtonomics.com/</string>
     <string name="error_create_company_before_login">Before login create company via web site, please.</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Sign out</string>
     <string name="error_please_try_again">Something went wrong. Please try again.</string>
     <string name="unitlist_title">Subdivisions</string>
+    <string name="knowledge_title">Knowledge</string>
     <string name="game_update_happening_now">Oops! The game update is happening now.\nEverything is going well, the game update takes place on the realm you are playing. Our servers need time to process the actions of the players and update the economic situation in the world of Virtonomics.</string>
+    <string name="nav_header_title">Company name</string>
+    <string name="nav_header_subtitle">Realm name</string>
 </resources>
