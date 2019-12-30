@@ -19,11 +19,14 @@ import com.virtaandroidbuddy.common.RefreshOwner;
 import com.virtaandroidbuddy.common.Refreshable;
 import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.api.GameUpdateHappeningNowException;
+import com.virtaandroidbuddy.data.api.SessionExpiredException;
 import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
 import com.virtaandroidbuddy.data.api.model.UnitListJson;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryActivity;
 import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryFragment;
+
+import io.reactivex.exceptions.CompositeException;
 
 
 public class UnitListFragment extends PresenterFragment<UnitListPresenter> implements UnitListView, Refreshable, UnitListAdapter.OnItemClickListener {
@@ -162,7 +165,10 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
         Log.e(TAG, throwable.toString(), throwable);
         if (throwable instanceof GameUpdateHappeningNowException) {
             showLoginWindow(getString(R.string.game_update_happening_now));
-        } else if (throwable instanceof NullPointerException) {
+        } else if (throwable instanceof NullPointerException
+                || throwable instanceof SessionExpiredException
+                || (throwable instanceof CompositeException && ((CompositeException) throwable).getExceptions().get(0) instanceof SessionExpiredException)
+        ) {
             showLoginWindow(null);
         } else {
             showLoginWindow(throwable.toString());

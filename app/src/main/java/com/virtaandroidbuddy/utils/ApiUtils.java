@@ -12,7 +12,7 @@ import com.virtaandroidbuddy.data.api.deserializer.CompanyJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitListJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitSummaryJsonDeserializer;
 import com.virtaandroidbuddy.data.api.interceptor.AddCookiesInterceptor;
-import com.virtaandroidbuddy.data.api.interceptor.GameUpdateHappeningNowInterceptor;
+import com.virtaandroidbuddy.data.api.interceptor.ResponseCodeInterceptor;
 import com.virtaandroidbuddy.data.api.interceptor.ReceivedCookiesInterceptor;
 import com.virtaandroidbuddy.data.api.model.CompanyJson;
 import com.virtaandroidbuddy.data.api.model.UnitListJson;
@@ -47,7 +47,7 @@ public class ApiUtils {
             client = new OkHttpClient.Builder()
                     .addInterceptor(new AddCookiesInterceptor(appContext))
                     .addInterceptor(new ReceivedCookiesInterceptor(appContext))
-                    .addInterceptor(new GameUpdateHappeningNowInterceptor())
+                    .addInterceptor(new ResponseCodeInterceptor())
                     //.addInterceptor(new LoggingInterceptor())
                     .build();
         }
