@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
+import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.api.GameUpdateHappeningNowException;
 import com.virtaandroidbuddy.utils.ApiUtils;
 import com.virtaandroidbuddy.data.api.VirtonomicaApi;
@@ -63,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(companyJson -> {
                                                 mErrorTv.setText("");
-                                                ((AppDelegate) getApplicationContext()).getStorage().insertSession(new Session(1, realm, companyJson.getId(), companyJson.getName()));
+                                                obtainStorage().insertSession(new Session(1, realm, companyJson.getId(), companyJson.getName()));
                                                 finish();
                                             },
                                             throwable -> mCompositeDisposable.add(
@@ -76,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                             .observeOn(AndroidSchedulers.mainThread())
                                                                             .subscribe(companyJson2 -> {
                                                                                         mErrorTv.setText("");
-                                                                                        ((AppDelegate) getApplicationContext()).getStorage().insertSession(new Session(1, realm, companyJson2.getId(), companyJson2.getName()));
+                                                                                        obtainStorage().insertSession(new Session(1, realm, companyJson2.getId(), companyJson2.getName()));
                                                                                         finish();
                                                                                     },
                                                                                     throwable12 -> {
@@ -116,12 +117,22 @@ public class LoginActivity extends AppCompatActivity {
             ApiUtils.setRealm(parent.getContext(), realms.get(0));
         }
     };
+
+    private Storage obtainStorage() {
+        return ((AppDelegate) getApplicationContext()).getStorage();
+    }
+
     public static final String ERROR_TEXT_PROP_NAME = "ERROR_TEXT";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_login);
+
+        final Storage storage = obtainStorage();
+        if (storage.getSession() != null) {
+            storage.deleteSession(storage.getSession());
+        }
 
         mLoginEd = findViewById(R.id.ed_login);
         mPasswordEd = findViewById(R.id.ed_password);
