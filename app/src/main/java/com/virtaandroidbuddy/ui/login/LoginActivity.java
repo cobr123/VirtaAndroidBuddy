@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private Spinner mRealmSp;
     private Button mLoginBtn;
     private TextView mErrorTv;
+    private ProgressBar mLoadingProgressBar;
     private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     final List<String> realms = Arrays.asList("vera", "olga", "anna", "lien", "mary", "nika", "fast");
@@ -52,9 +54,11 @@ public class LoginActivity extends AppCompatActivity {
             } else if (password.isEmpty()) {
                 mErrorTv.setText(getString(R.string.error_password_required));
             } else {
+                mErrorTv.setText("");
                 ApiUtils.setCookies(view.getContext(), null);
                 final String realm = realms.get((int) mRealmSp.getSelectedItemId());
                 try {
+                    disableInput();
                     final VirtonomicaApi api = ApiUtils.getApiService(view.getContext());
 
                     //init cookies
@@ -63,8 +67,8 @@ public class LoginActivity extends AppCompatActivity {
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(companyJson -> {
-                                                mErrorTv.setText("");
                                                 obtainStorage().insertSession(new Session(1, realm, companyJson.getId(), companyJson.getName()));
+                                                enabledInput();
                                                 finish();
                                             },
                                             throwable -> mCompositeDisposable.add(
@@ -76,11 +80,12 @@ public class LoginActivity extends AppCompatActivity {
                                                                             .subscribeOn(Schedulers.io())
                                                                             .observeOn(AndroidSchedulers.mainThread())
                                                                             .subscribe(companyJson2 -> {
-                                                                                        mErrorTv.setText("");
                                                                                         obtainStorage().insertSession(new Session(1, realm, companyJson2.getId(), companyJson2.getName()));
+                                                                                        enabledInput();
                                                                                         finish();
                                                                                     },
                                                                                     throwable12 -> {
+                                                                                        enabledInput();
                                                                                         mCompositeDisposable.clear();
                                                                                         Log.e(TAG + ".getCompanyInfo2", throwable12.toString(), throwable12);
                                                                                         if (throwable12 instanceof GameUpdateHappeningNowException) {
@@ -90,22 +95,41 @@ public class LoginActivity extends AppCompatActivity {
                                                                                         }
                                                                                     })),
                                                                     throwable1 -> {
+                                                                        enabledInput();
                                                                         mCompositeDisposable.clear();
                                                                         Log.e(TAG + ".login", throwable1.toString(), throwable1);
                                                                         if (throwable1 instanceof GameUpdateHappeningNowException) {
                                                                             mErrorTv.setText(getString(R.string.game_update_happening_now));
                                                                         } else {
-                                                                            mErrorTv.setText(throwable1.toString());
+                                                                            mErrorTv.setText(throwable1.getLocalizedMessage());
                                                                         }
                                                                     }))));
                 } catch (Throwable t) {
+                    enabledInput();
                     mCompositeDisposable.clear();
                     Log.e(TAG + ".onClick", t.toString());
-                    mErrorTv.setText(t.toString());
+                    mErrorTv.setText(t.getLocalizedMessage());
                 }
             }
         }
     };
+
+    private void disableInput() {
+        mLoadingProgressBar.setVisibility(View.VISIBLE);
+        mLoginEd.setEnabled(false);
+        mPasswordEd.setEnabled(false);
+        mLoginBtn.setEnabled(false);
+        mRealmSp.setEnabled(false);
+    }
+
+    private void enabledInput() {
+        mLoadingProgressBar.setVisibility(View.GONE);
+        mLoginEd.setEnabled(true);
+        mPasswordEd.setEnabled(true);
+        mLoginBtn.setEnabled(true);
+        mRealmSp.setEnabled(true);
+    }
+
     private final AdapterView.OnItemSelectedListener mOnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -139,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         mRealmSp = findViewById(R.id.sp_realm);
         mLoginBtn = findViewById(R.id.btn_login);
         mErrorTv = findViewById(R.id.tv_error);
+        mLoadingProgressBar = findViewById(R.id.loading);
 
         final ArrayAdapter<String> realms_adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, realms);
         mRealmSp.setAdapter(realms_adapter);
