@@ -5,6 +5,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.virtaandroidbuddy.R;
+import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -27,6 +28,9 @@ public class UnitMainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.unit_nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        final String unitClassName = getIntent().getStringExtra(UnitSummaryFragment.UNIT_CLASS_NAME_KEY);
+        navView.getMenu().findItem(R.id.unit_navigation_summary).setTitle(unitClassName);
     }
 
     @Override

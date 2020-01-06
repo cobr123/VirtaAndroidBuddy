@@ -71,7 +71,8 @@ public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter>
 
         mUnitId = getActivity().getIntent().getStringExtra(UNIT_ID_KEY);
 
-        ((UnitMainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getIntent().getStringExtra(UNIT_CLASS_NAME_KEY));
+        final String unitClassName = getActivity().getIntent().getStringExtra(UNIT_CLASS_NAME_KEY);
+        ((UnitMainActivity) getActivity()).getSupportActionBar().setTitle(unitClassName);
 
         mPresenter = new UnitSummaryPresenter(this, mStorage);
         mUnitSummaryView.setVisibility(View.VISIBLE);
