@@ -30,4 +30,6 @@
     <string name="game_update_happening_now">Oops! The game update is happening now.\nEverything is going well, the game update takes place on the realm you are playing. Our servers need time to process the actions of the players and update the economic situation in the world of Virtonomics.</string>
     <string name="nav_header_title">Company name</string>
     <string name="nav_header_subtitle">Realm name</string>
+    <string name="unit_summary_title">Summary</string>
+    <string name="unit_finans_report_title">Financial report</string>
 </resources>

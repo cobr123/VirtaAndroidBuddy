@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/unit_bottom_navigation"
+    app:startDestination="@+id/unit_navigation_summary">
+
+    <fragment
+        android:id="@+id/unit_navigation_summary"
+        android:name="com.virtaandroidbuddy.ui.unit.summary.UnitSummaryFragment"
+        android:label="@string/unit_summary_title"
+        tools:layout="@layout/fr_unit_summary" />
+
+    <fragment
+        android:id="@+id/unit_navigation_finans_report"
+        android:name="com.virtaandroidbuddy.ui.unit.finansreport.UnitFinansReportFragment"
+        android:label="@string/unit_finans_report_title"
+        tools:layout="@layout/fr_unit_finans_report" />
+
+</navigation>

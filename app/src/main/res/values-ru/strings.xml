@@ -31,4 +31,6 @@
     <string name="game_update_happening_now">Ой! Идёт пересчёт игровой ситуации.\nВсё в порядке, просто на выбранном реалме идёт пересчёт. Нашим серверам нужно время, чтобы обработать действия игроков и обновить экономическую ситуацию в мире Виртономики.</string>
     <string name="nav_header_title">Наименование компании</string>
     <string name="nav_header_subtitle">Наименование реалма</string>
+    <string name="unit_summary_title">Обзор</string>
+    <string name="unit_finans_report_title">Финансовый отчёт</string>
 </resources>

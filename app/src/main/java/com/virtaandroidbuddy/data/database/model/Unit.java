@@ -22,6 +22,9 @@ public class Unit {
     @ColumnInfo(name = "name")
     private String mName;
 
+    @ColumnInfo(name = "unit_class_name")
+    private String mUnitClassName;
+
     public Unit() {
     }
 
@@ -65,5 +68,13 @@ public class Unit {
 
     public void setCompanyId(String companyId) {
         mCompanyId = companyId;
+    }
+
+    public String getUnitClassName() {
+        return mUnitClassName;
+    }
+
+    public void setUnitClassName(String unitClassName) {
+        mUnitClassName = unitClassName;
     }
 }

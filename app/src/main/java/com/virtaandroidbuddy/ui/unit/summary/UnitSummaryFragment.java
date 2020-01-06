@@ -12,22 +12,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.common.PresenterFragment;
-import com.virtaandroidbuddy.common.RefreshOwner;
 import com.virtaandroidbuddy.common.Refreshable;
 import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.api.GameUpdateHappeningNowException;
 import com.virtaandroidbuddy.data.api.model.UnitSummaryJson;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
+import com.virtaandroidbuddy.ui.unit.UnitMainActivity;
 
 public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter> implements UnitSummaryView, Refreshable {
 
     private static final String TAG = UnitSummaryFragment.class.getSimpleName();
 
     public static final String UNIT_ID_KEY = "UNIT_ID_KEY";
+    public static final String UNIT_CLASS_NAME_KEY = "UNIT_CLASS_NAME_KEY";
 
-    private RefreshOwner mRefreshOwner;
     private View mErrorView;
     private View mUnitSummaryView;
     private String mUnitId;
@@ -37,19 +38,16 @@ public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter>
     private TextView mUnitSummaryId;
     private TextView mUnitSummaryName;
 
-    public static UnitSummaryFragment newInstance(Bundle args) {
-        UnitSummaryFragment fragment = new UnitSummaryFragment();
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mStorage = context instanceof Storage.StorageOwner ? ((Storage.StorageOwner) context).obtainStorage() : null;
-        mRefreshOwner = context instanceof RefreshOwner ? (RefreshOwner) context : null;
+        mStorage = ((AppDelegate) getActivity().getApplicationContext()).getStorage();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((UnitMainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Nullable
@@ -71,13 +69,9 @@ public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter>
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (getArguments() != null) {
-            mUnitId = getArguments().getString(UNIT_ID_KEY);
-        }
+        mUnitId = getActivity().getIntent().getStringExtra(UNIT_ID_KEY);
 
-        if (getActivity() != null) {
-            getActivity().setTitle(mUnitId);
-        }
+        ((UnitMainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getIntent().getStringExtra(UNIT_CLASS_NAME_KEY));
 
         mPresenter = new UnitSummaryPresenter(this, mStorage);
         mUnitSummaryView.setVisibility(View.VISIBLE);
@@ -108,18 +102,17 @@ public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter>
     @Override
     public void onDetach() {
         mStorage = null;
-        mRefreshOwner = null;
         super.onDetach();
     }
 
     @Override
     public void showLoading() {
-        mRefreshOwner.setRefreshState(true);
+
     }
 
     @Override
     public void hideLoading() {
-        mRefreshOwner.setRefreshState(false);
+
     }
 
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/unit_navigation_summary"
+        android:icon="@drawable/ic_unit_summary_black_24dp"
+        android:title="@string/unit_summary_title" />
+
+    <item
+        android:id="@+id/unit_navigation_finans_report"
+        android:icon="@drawable/ic_unit_finans_report_black_24dp"
+        android:title="@string/unit_finans_report_title" />
+
+</menu>

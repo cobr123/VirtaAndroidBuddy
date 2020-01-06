@@ -32,6 +32,7 @@ public class UnitListJsonDeserializer implements JsonDeserializer<UnitListJson> 
             final UnitListDataJson dataItem = new UnitListDataJson();
             dataItem.setId(item.get("id").getAsString());
             dataItem.setName(item.get("name").getAsString());
+            dataItem.setUnitClassName(item.get("unit_class_name").getAsString());
             dataList.add(dataItem);
         }
         unitListJson.setData(dataList);

@@ -23,7 +23,7 @@ import com.virtaandroidbuddy.data.api.SessionExpiredException;
 import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
 import com.virtaandroidbuddy.data.api.model.UnitListJson;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
-import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryActivity;
+import com.virtaandroidbuddy.ui.unit.UnitMainActivity;
 import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryFragment;
 
 import io.reactivex.exceptions.CompositeException;
@@ -131,11 +131,10 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
     }
 
     @Override
-    public void openUnitSummary(UnitListDataJson unitListDataJson) {
-        Intent intent = new Intent(getActivity(), UnitSummaryActivity.class);
-        Bundle args = new Bundle();
-        args.putString(UnitSummaryFragment.UNIT_ID_KEY, unitListDataJson.getId());
-        intent.putExtra(UnitSummaryActivity.UNIT_SUMMARY_BUNDLE_KEY, args);
+    public void openUnitSummary(final UnitListDataJson unitListDataJson) {
+        final Intent intent = new Intent(getActivity(), UnitMainActivity.class);
+        intent.putExtra(UnitSummaryFragment.UNIT_ID_KEY, unitListDataJson.getId());
+        intent.putExtra(UnitSummaryFragment.UNIT_CLASS_NAME_KEY, unitListDataJson.getUnitClassName());
         startActivity(intent);
     }
 

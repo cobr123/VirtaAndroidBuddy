@@ -9,6 +9,7 @@ public class UnitListDataJson implements Serializable {
     private String mUnitTypeId;
     private String mUnitTypeSymbol;
     private String mUnitTypeName;
+    private String mUnitClassName;
     private String mCountryId;
     private String mCountrySymbol;
     private String mCountryName;
@@ -31,5 +32,13 @@ public class UnitListDataJson implements Serializable {
 
     public void setName(String mName) {
         this.mName = mName;
+    }
+
+    public String getUnitClassName() {
+        return mUnitClassName;
+    }
+
+    public void setUnitClassName(String unitClassName) {
+        mUnitClassName = unitClassName;
     }
 }

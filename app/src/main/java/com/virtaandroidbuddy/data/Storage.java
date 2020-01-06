@@ -48,6 +48,7 @@ public class Storage {
             final UnitListDataJson dataItem = new UnitListDataJson();
             dataItem.setId(unit.getId());
             dataItem.setName(unit.getName());
+            dataItem.setUnitClassName(unit.getUnitClassName());
             data.add(dataItem);
         }
         final UnitListJson unitListJson = new UnitListJson();
