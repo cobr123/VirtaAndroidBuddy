@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(companyJson -> {
-                                                obtainStorage().insertSession(new Session(1, realm, companyJson.getId(), companyJson.getName()));
+                                                obtainStorage().insertSession(new Session(1, realm, companyJson.getId(), companyJson.getName(), companyJson.getPresidentUserId()));
                                                 enabledInput();
                                                 finish();
                                             },
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                             .subscribeOn(Schedulers.io())
                                                                             .observeOn(AndroidSchedulers.mainThread())
                                                                             .subscribe(companyJson2 -> {
-                                                                                        obtainStorage().insertSession(new Session(1, realm, companyJson2.getId(), companyJson2.getName()));
+                                                                                        obtainStorage().insertSession(new Session(1, realm, companyJson2.getId(), companyJson2.getName(), companyJson2.getPresidentUserId()));
                                                                                         enabledInput();
                                                                                         finish();
                                                                                     },

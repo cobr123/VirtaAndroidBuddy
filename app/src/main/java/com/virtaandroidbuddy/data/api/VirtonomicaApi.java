@@ -6,6 +6,7 @@ import com.virtaandroidbuddy.data.api.model.UnitSummaryJson;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import okhttp3.ResponseBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -29,4 +30,7 @@ public interface VirtonomicaApi {
 
     @GET("api/{realm}/my/unit/summary")
     Single<UnitSummaryJson> getUnitSummary(@Path("realm") String realm, @Query("id") String unit_id);
+
+    @GET("{realm}/main/user/privat/persondata/knowledge?old")
+    Single<ResponseBody> getKnowledge(@Path("realm") String realm);
 }

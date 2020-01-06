@@ -1,9 +1,13 @@
 package com.virtaandroidbuddy.data;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
 import com.virtaandroidbuddy.data.api.model.UnitListJson;
 import com.virtaandroidbuddy.data.api.model.UnitSummaryJson;
 import com.virtaandroidbuddy.data.database.VirtonomicaDao;
+import com.virtaandroidbuddy.data.database.model.Knowledge;
 import com.virtaandroidbuddy.data.database.model.Session;
 import com.virtaandroidbuddy.data.database.model.Unit;
 import com.virtaandroidbuddy.data.database.model.UnitSummary;
@@ -74,6 +78,21 @@ public class Storage {
         unitSummaryJson.setId(unitSummary.getId());
         unitSummaryJson.setName(unitSummary.getName());
         return unitSummaryJson;
+    }
+
+    public LiveData<Knowledge> getKnowledge(String realm, String userId) {
+        final LiveData<Knowledge> knowledgeLiveData = mVirtonomicaDao.getKnowledge(realm, userId);
+        if (knowledgeLiveData.getValue() == null) {
+            final MutableLiveData<Knowledge> emptyKnowledgeLiveData = new MutableLiveData<>();
+            emptyKnowledgeLiveData.setValue(new Knowledge());
+            return emptyKnowledgeLiveData;
+        } else {
+            return knowledgeLiveData;
+        }
+    }
+
+    public void insertKnowledge(Knowledge knowledge) {
+        mVirtonomicaDao.insertKnowledge(knowledge);
     }
 
     public interface StorageOwner {

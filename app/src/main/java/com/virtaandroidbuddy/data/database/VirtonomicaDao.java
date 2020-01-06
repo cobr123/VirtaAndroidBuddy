@@ -1,5 +1,6 @@
 package com.virtaandroidbuddy.data.database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -7,6 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.virtaandroidbuddy.data.database.model.Company;
+import com.virtaandroidbuddy.data.database.model.Knowledge;
 import com.virtaandroidbuddy.data.database.model.Session;
 import com.virtaandroidbuddy.data.database.model.Unit;
 import com.virtaandroidbuddy.data.database.model.UnitSummary;
@@ -51,4 +53,10 @@ public interface VirtonomicaDao {
 
     @Delete
     void deleteUnitSummary(UnitSummary unitSummary);
+
+    @Query("select * from knowledge where realm = :realm and user_id = :userId")
+    LiveData<Knowledge> getKnowledge(String realm, String userId);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertKnowledge(Knowledge knowledge);
 }

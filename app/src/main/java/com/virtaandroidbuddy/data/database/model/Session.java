@@ -21,15 +21,19 @@ public class Session {
     @ColumnInfo(name = "company_name")
     private String mCompanyName;
 
+    @ColumnInfo(name = "user_id")
+    private String mUserId;
+
     public Session() {
     }
 
     @Ignore
-    public Session(int id, String realm, String companyId, String companyName) {
+    public Session(int id, String realm, String companyId, String companyName, String userId) {
         this.mId = id;
         this.mRealm = realm;
         this.mCompanyId = companyId;
         this.mCompanyName = companyName;
+        this.mUserId = userId;
     }
 
     public int getId() {
@@ -62,5 +66,13 @@ public class Session {
 
     public void setCompanyName(String companyName) {
         mCompanyName = companyName;
+    }
+
+    public String getUserId() {
+        return mUserId;
+    }
+
+    public void setUserId(String userId) {
+        mUserId = userId;
     }
 }
