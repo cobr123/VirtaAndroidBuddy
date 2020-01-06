@@ -1,392 +1,385 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+
+    <TableLayout
+        android:id="@+id/tableLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/knowledge_management_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_management_title"
-            tools:text="knowledge_management_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_management_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_management_title"
+                tools:text="knowledge_management_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_advert_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_advert_title"
-            tools:text="knowledge_advert_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_advert_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_advert_title"
+                tools:text="knowledge_advert_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_it_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_it_title"
-            tools:text="knowledge_it_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_it_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_it_title"
+                tools:text="knowledge_it_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_car_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_car_title"
-            tools:text="knowledge_car_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_car_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_car_title"
+                tools:text="knowledge_car_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_medicine_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_medicine_title"
-            tools:text="knowledge_medicine_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_medicine_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_medicine_title"
+                tools:text="knowledge_medicine_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_educational_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_educational_title"
-            tools:text="knowledge_educational_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_educational_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_educational_title"
+                tools:text="knowledge_educational_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_restaurant_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_restaurant_title"
-            tools:text="knowledge_restaurant_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_restaurant_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1000+1000" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_restaurant_title"
+                tools:text="knowledge_restaurant_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_service_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_service_title"
-            tools:text="knowledge_service_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_service_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_service_title"
+                tools:text="knowledge_service_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_trade_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_trade_title"
-            tools:text="knowledge_trade_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_trade_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_trade_title"
+                tools:text="knowledge_trade_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_mining_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_mining_title"
-            tools:text="knowledge_mining_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_mining_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_mining_title"
+                tools:text="knowledge_mining_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_manufacture_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_manufacture_title"
-            tools:text="knowledge_manufacture_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_manufacture_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_manufacture_title"
+                tools:text="knowledge_manufacture_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_power_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_power_title"
-            tools:text="knowledge_power_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_power_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_power_title"
+                tools:text="knowledge_power_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_animal_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_animal_title"
-            tools:text="knowledge_animal_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_animal_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_animal_title"
+                tools:text="knowledge_animal_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_fishing_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="100+100" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_fishing_title"
-            tools:text="knowledge_fishing_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_fishing_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="100+100" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_fishing_title"
+                tools:text="knowledge_fishing_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_farming_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="100+1" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_farming_title"
-            tools:text="knowledge_farming_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_farming_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="100+1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_farming_title"
+                tools:text="knowledge_farming_title" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/knowledge_research_lvl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
-            android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
-            android:gravity="end"
-            tools:text="1+10" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/knowledge_name_margin_start"
-            android:layout_marginTop="@dimen/knowledge_name_margin_top"
-            android:gravity="start"
-            android:text="@string/knowledge_research_title"
-            tools:text="knowledge_research_title" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/knowledge_research_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1+10" />
 
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_name_margin_start"
+                android:layout_marginTop="@dimen/knowledge_name_margin_top"
+                android:layout_marginBottom="@dimen/knowledge_name_margin_top"
+                android:gravity="start"
+                android:text="@string/knowledge_research_title"
+                tools:text="knowledge_research_title" />
+        </TableRow>
+
+    </TableLayout>
+
+
+</ScrollView>
