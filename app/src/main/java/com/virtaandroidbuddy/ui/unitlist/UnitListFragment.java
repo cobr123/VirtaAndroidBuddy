@@ -96,8 +96,8 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
     public void onRefresh() {
         try {
             mPresenter.getUnitlist(getActivity());
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
+        } catch (Throwable throwable) {
+            Log.e(TAG + "onRefresh", throwable.toString(), throwable);
             showLoginWindow(null);
         }
     }

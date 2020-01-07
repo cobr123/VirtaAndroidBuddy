@@ -55,6 +55,10 @@ public class LoginActivity extends AppCompatActivity {
                 mErrorTv.setText(getString(R.string.error_password_required));
             } else {
                 mErrorTv.setText("");
+                final Storage storage = obtainStorage();
+                if (storage.getSession() != null) {
+                    storage.deleteSession(storage.getSession());
+                }
                 ApiUtils.setCookies(view.getContext(), null);
                 final String realm = realms.get((int) mRealmSp.getSelectedItemId());
                 try {
@@ -67,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(companyJson -> {
-                                                obtainStorage().insertSession(new Session(1, realm, companyJson.getId(), companyJson.getName(), companyJson.getPresidentUserId()));
+                                                storage.insertSession(new Session(1, realm, companyJson.getId(), companyJson.getName(), companyJson.getPresidentUserId()));
                                                 enabledInput();
                                                 finish();
                                             },
@@ -80,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                             .subscribeOn(Schedulers.io())
                                                                             .observeOn(AndroidSchedulers.mainThread())
                                                                             .subscribe(companyJson2 -> {
-                                                                                        obtainStorage().insertSession(new Session(1, realm, companyJson2.getId(), companyJson2.getName(), companyJson2.getPresidentUserId()));
+                                                                                        storage.insertSession(new Session(1, realm, companyJson2.getId(), companyJson2.getName(), companyJson2.getPresidentUserId()));
                                                                                         enabledInput();
                                                                                         finish();
                                                                                     },
@@ -152,11 +156,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_login);
-
-        final Storage storage = obtainStorage();
-        if (storage.getSession() != null) {
-            storage.deleteSession(storage.getSession());
-        }
 
         mLoginEd = findViewById(R.id.ed_login);
         mPasswordEd = findViewById(R.id.ed_password);
