@@ -1,6 +1,9 @@
 package com.virtaandroidbuddy.ui.login;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,20 +13,27 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
+import androidx.core.os.CancellationSignal;
 
 import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.api.GameUpdateHappeningNowException;
+import com.virtaandroidbuddy.utils.CryptoUtils;
+import com.virtaandroidbuddy.utils.FingerprintUtils;
 import com.virtaandroidbuddy.utils.ApiUtils;
 import com.virtaandroidbuddy.data.api.VirtonomicaApi;
 import com.virtaandroidbuddy.data.database.model.Session;
 
 import java.util.Arrays;
 import java.util.List;
+
+import javax.crypto.Cipher;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -41,6 +51,10 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mErrorTv;
     private ProgressBar mLoadingProgressBar;
     private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+
+    private static final String LOGIN_PASSWORD_KEY = "login_password";
+    private SharedPreferences mPreferences;
+    private FingerprintHelper mFingerprintHelper;
 
     final List<String> realms = Arrays.asList("vera", "olga", "anna", "lien", "mary", "nika", "fast");
 
@@ -84,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                             .subscribeOn(Schedulers.io())
                                                                             .observeOn(AndroidSchedulers.mainThread())
                                                                             .subscribe(companyJson2 -> {
+                                                                                        save(login, password);
                                                                                         storage.insertSession(new Session(1, realm, companyJson2.getId(), companyJson2.getName(), companyJson2.getPresidentUserId()));
                                                                                         enabledInput();
                                                                                         finish();
@@ -177,11 +192,93 @@ public class LoginActivity extends AppCompatActivity {
         if (error != null && !error.isEmpty()) {
             mErrorTv.setText(error);
         }
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mPreferences.contains(LOGIN_PASSWORD_KEY)) {
+            prepareSensor();
+        }
     }
 
     @Override
     protected void onStop() {
-        mCompositeDisposable.clear();
         super.onStop();
+        if (mFingerprintHelper != null) {
+            mFingerprintHelper.cancel();
+        }
+        mCompositeDisposable.clear();
+    }
+
+    private void save(String login, String password) {
+        if (FingerprintUtils.isSensorStateAt(FingerprintUtils.mSensorState.READY, this)) {
+            mPreferences.edit()
+                    .putString(LOGIN_PASSWORD_KEY, CryptoUtils.encode(login + '\r' + password))
+                    .apply();
+        }
+    }
+
+    private void prepareSensor() {
+        if (FingerprintUtils.isSensorStateAt(FingerprintUtils.mSensorState.READY, this)) {
+            FingerprintManagerCompat.CryptoObject cryptoObject = CryptoUtils.getCryptoObject();
+            if (cryptoObject != null) {
+                Toast.makeText(this, "use fingerprint to login", Toast.LENGTH_LONG).show();
+                mFingerprintHelper = new FingerprintHelper(this);
+                mFingerprintHelper.startAuth(cryptoObject);
+            } else {
+                mPreferences.edit().remove(LOGIN_PASSWORD_KEY).apply();
+                Toast.makeText(this, "new fingerprint enrolled. enter login and password again", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    public class FingerprintHelper extends FingerprintManagerCompat.AuthenticationCallback {
+        private Context mContext;
+        private CancellationSignal mCancellationSignal;
+
+        FingerprintHelper(Context context) {
+            mContext = context;
+        }
+
+        void startAuth(FingerprintManagerCompat.CryptoObject cryptoObject) {
+            mCancellationSignal = new CancellationSignal();
+            FingerprintManagerCompat manager = FingerprintManagerCompat.from(mContext);
+            manager.authenticate(cryptoObject, 0, mCancellationSignal, this, null);
+        }
+
+        void cancel() {
+            if (mCancellationSignal != null) {
+                mCancellationSignal.cancel();
+            }
+        }
+
+        @Override
+        public void onAuthenticationError(int errMsgId, CharSequence errString) {
+            Toast.makeText(mContext, errString, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+            Toast.makeText(mContext, helpString, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
+            final Cipher cipher = result.getCryptoObject().getCipher();
+            final String[] login_password = CryptoUtils.decode(mPreferences.getString(LOGIN_PASSWORD_KEY, null), cipher).split("\r");
+            mLoginEd.setText(login_password[0]);
+            mPasswordEd.setText(login_password[1]);
+            Toast.makeText(mContext, "success", Toast.LENGTH_SHORT).show();
+            mLoginBtn.callOnClick();
+        }
+
+        @Override
+        public void onAuthenticationFailed() {
+            Toast.makeText(mContext, "try again", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
