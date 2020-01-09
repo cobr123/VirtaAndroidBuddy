@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import androidx.core.os.CancellationSignal;
 
+import com.google.gson.Gson;
 import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.data.Storage;
@@ -98,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                             .subscribeOn(Schedulers.io())
                                                                             .observeOn(AndroidSchedulers.mainThread())
                                                                             .subscribe(companyJson2 -> {
-                                                                                        save(login, password);
+                                                                                        save(login, password, realm);
                                                                                         storage.insertSession(new Session(1, realm, companyJson2.getId(), companyJson2.getName(), companyJson2.getPresidentUserId()));
                                                                                         enabledInput();
                                                                                         finish();
@@ -212,10 +213,10 @@ public class LoginActivity extends AppCompatActivity {
         mCompositeDisposable.clear();
     }
 
-    private void save(String login, String password) {
+    private void save(String login, String password, String realm) {
         if (FingerprintUtils.isSensorStateAt(FingerprintUtils.mSensorState.READY, this)) {
             mPreferences.edit()
-                    .putString(LOGIN_PASSWORD_KEY, CryptoUtils.encode(login + '\r' + password))
+                    .putString(LOGIN_PASSWORD_KEY, CryptoUtils.encode(new Gson().toJson(new LoginFormJson(login, password, realm))))
                     .apply();
         }
     }
@@ -268,9 +269,12 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
             final Cipher cipher = result.getCryptoObject().getCipher();
-            final String[] login_password = CryptoUtils.decode(mPreferences.getString(LOGIN_PASSWORD_KEY, null), cipher).split("\r");
-            mLoginEd.setText(login_password[0]);
-            mPasswordEd.setText(login_password[1]);
+            final String loginFormJsonString = CryptoUtils.decode(mPreferences.getString(LOGIN_PASSWORD_KEY, null), cipher);
+            final LoginFormJson loginFormJson = new Gson().fromJson(loginFormJsonString, LoginFormJson.class);
+            mLoginEd.setText(loginFormJson.getLogin());
+            mPasswordEd.setText(loginFormJson.getPassword());
+            final int spinnerPosition = ((ArrayAdapter<String>) mRealmSp.getAdapter()).getPosition(loginFormJson.getRealm());
+            mRealmSp.setSelection(spinnerPosition);
             Toast.makeText(mContext, "success", Toast.LENGTH_SHORT).show();
             mLoginBtn.callOnClick();
         }
