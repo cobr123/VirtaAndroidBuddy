@@ -6,8 +6,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 
 @Entity(primaryKeys = {"realm", "id"})
-public class UnitSummary {
-
+public class Country {
     @NonNull
     @ColumnInfo(name = "realm")
     private String mRealm;
@@ -16,11 +15,21 @@ public class UnitSummary {
     @ColumnInfo(name = "id")
     private String mId;
 
-    @ColumnInfo(name = "company_id")
-    private String mCompanyId;
-
     @ColumnInfo(name = "name")
     private String mName;
+
+    @Override
+    public String toString() {
+        return mName;
+    }
+
+    public Country() {
+    }
+
+    @Ignore
+    public Country(String name) {
+        mName = name;
+    }
 
     @NonNull
     public String getRealm() {
@@ -46,13 +55,5 @@ public class UnitSummary {
 
     public void setName(String name) {
         mName = name;
-    }
-
-    public String getCompanyId() {
-        return mCompanyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        mCompanyId = companyId;
     }
 }

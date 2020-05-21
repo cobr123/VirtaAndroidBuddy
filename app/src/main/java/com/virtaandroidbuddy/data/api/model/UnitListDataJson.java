@@ -41,4 +41,84 @@ public class UnitListDataJson implements Serializable {
     public void setUnitClassName(String unitClassName) {
         mUnitClassName = unitClassName;
     }
+
+    public String getUnitTypeId() {
+        return mUnitTypeId;
+    }
+
+    public void setUnitTypeId(String unitTypeId) {
+        mUnitTypeId = unitTypeId;
+    }
+
+    public String getUnitTypeSymbol() {
+        return mUnitTypeSymbol;
+    }
+
+    public void setUnitTypeSymbol(String unitTypeSymbol) {
+        mUnitTypeSymbol = unitTypeSymbol;
+    }
+
+    public String getUnitTypeName() {
+        return mUnitTypeName;
+    }
+
+    public void setUnitTypeName(String unitTypeName) {
+        mUnitTypeName = unitTypeName;
+    }
+
+    public String getCountryId() {
+        return mCountryId;
+    }
+
+    public void setCountryId(String countryId) {
+        mCountryId = countryId;
+    }
+
+    public String getCountrySymbol() {
+        return mCountrySymbol;
+    }
+
+    public void setCountrySymbol(String countrySymbol) {
+        mCountrySymbol = countrySymbol;
+    }
+
+    public String getCountryName() {
+        return mCountryName;
+    }
+
+    public void setCountryName(String countryName) {
+        mCountryName = countryName;
+    }
+
+    public String getRegionId() {
+        return mRegionId;
+    }
+
+    public void setRegionId(String regionId) {
+        mRegionId = regionId;
+    }
+
+    public String getRegionName() {
+        return mRegionName;
+    }
+
+    public void setRegionName(String regionName) {
+        mRegionName = regionName;
+    }
+
+    public String getCityId() {
+        return mCityId;
+    }
+
+    public void setCityId(String cityId) {
+        mCityId = cityId;
+    }
+
+    public String getCityName() {
+        return mCityName;
+    }
+
+    public void setCityName(String cityName) {
+        mCityName = cityName;
+    }
 }

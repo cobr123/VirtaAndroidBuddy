@@ -30,9 +30,15 @@ public class UnitListJsonDeserializer implements JsonDeserializer<UnitListJson> 
         for (Map.Entry<String, JsonElement> entry : data.entrySet()) {
             final JsonObject item = (JsonObject) entry.getValue();
             final UnitListDataJson dataItem = new UnitListDataJson();
+
             dataItem.setId(item.get("id").getAsString());
             dataItem.setName(item.get("name").getAsString());
             dataItem.setUnitClassName(item.get("unit_class_name").getAsString());
+
+            dataItem.setCityId(item.get("city_id").getAsString());
+            dataItem.setRegionId(item.get("region_id").getAsString());
+            dataItem.setCountryId(item.get("country_id").getAsString());
+
             dataList.add(dataItem);
         }
         unitListJson.setData(dataList);

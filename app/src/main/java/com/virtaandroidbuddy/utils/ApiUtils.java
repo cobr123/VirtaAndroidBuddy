@@ -6,9 +6,13 @@ import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.data.api.VirtonomicaApi;
+import com.virtaandroidbuddy.data.api.deserializer.CityJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.CompanyJsonDeserializer;
+import com.virtaandroidbuddy.data.api.deserializer.CountryJsonDeserializer;
+import com.virtaandroidbuddy.data.api.deserializer.RegionJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitListJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitSummaryJsonDeserializer;
 import com.virtaandroidbuddy.data.api.interceptor.AddCookiesInterceptor;
@@ -17,6 +21,9 @@ import com.virtaandroidbuddy.data.api.interceptor.ReceivedCookiesInterceptor;
 import com.virtaandroidbuddy.data.api.model.CompanyJson;
 import com.virtaandroidbuddy.data.api.model.UnitListJson;
 import com.virtaandroidbuddy.data.api.model.UnitSummaryJson;
+import com.virtaandroidbuddy.data.database.model.City;
+import com.virtaandroidbuddy.data.database.model.Country;
+import com.virtaandroidbuddy.data.database.model.Region;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -60,6 +67,12 @@ public class ApiUtils {
                     .registerTypeAdapter(CompanyJson.class, new CompanyJsonDeserializer())
                     .registerTypeAdapter(UnitListJson.class, new UnitListJsonDeserializer())
                     .registerTypeAdapter(UnitSummaryJson.class, new UnitSummaryJsonDeserializer())
+                    .registerTypeAdapter(new TypeToken<List<Country>>() {
+                    }.getType(), new CountryJsonDeserializer())
+                    .registerTypeAdapter(new TypeToken<List<Region>>() {
+                    }.getType(), new RegionJsonDeserializer())
+                    .registerTypeAdapter(new TypeToken<List<City>>() {
+                    }.getType(), new CityJsonDeserializer())
                     .create();
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)

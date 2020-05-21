@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -25,6 +28,7 @@ import com.virtaandroidbuddy.data.api.model.UnitListJson;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 import com.virtaandroidbuddy.ui.unit.UnitMainActivity;
 import com.virtaandroidbuddy.ui.unit.summary.UnitSummaryFragment;
+import com.virtaandroidbuddy.ui.unitlist.filter.UnitListFilterActivity;
 
 import io.reactivex.exceptions.CompositeException;
 
@@ -104,6 +108,7 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
 
 
     private final int REQUEST_CODE_LOGIN = 1;
+    private final int REQUEST_CODE_FILTER = 2;
 
     private void showLoginWindow(final String error) {
         final Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -117,10 +122,39 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
             case REQUEST_CODE_LOGIN:
                 onRefresh();
                 break;
+            case REQUEST_CODE_FILTER:
+                onRefresh();
+                break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // TODO Add your menu entries here
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.unitlist_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.unitlist_filter_action:
+                final Intent intent = new Intent(getActivity(), UnitListFilterActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_FILTER);
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

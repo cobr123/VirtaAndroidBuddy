@@ -11,6 +11,9 @@
     <string name="logout">Выйти</string>
     <string name="error_please_try_again">Что-то пошло не так. Попробуйте снова.</string>
     <string name="unitlist_title">Подразделения</string>
+    <string name="filter">Фильтр</string>
+    <string name="show_filtered_unitlist_button_title">Подразделений найдено: %1$d</string>
+    <string name="subdivisions_filter">Фильтр подразделений</string>
     <string name="knowledge_title">Квалификация</string>
     <string name="knowledge_management_title">Управление</string>
     <string name="knowledge_advert_title">Маркетинг (реклама)</string>

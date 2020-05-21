@@ -27,10 +27,10 @@ public class UnitListPresenter extends BasePresenter {
 
         mCompositeDisposable.add(ApiUtils.getApiService(context).getUnitList(session.getRealm(), session.getCompanyId())
                 .subscribeOn(Schedulers.io())
-                .doOnSuccess(response -> mStorage.insertUnits(response, session))
+                .doOnSuccess(response -> mStorage.insertUnits(session.getRealm(), session.getCompanyId(), response))
                 .onErrorReturn(throwable -> {
                     if (ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())) {
-                        return mStorage.getUnitList(session);
+                        return mStorage.getUnitList(session.getRealm(), session.getCompanyId());
                     } else {
                         throw new Exception(throwable);
                     }

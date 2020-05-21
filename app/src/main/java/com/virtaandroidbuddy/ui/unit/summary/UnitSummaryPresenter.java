@@ -25,10 +25,10 @@ public class UnitSummaryPresenter extends BasePresenter {
         final Session session = mStorage.getSession();
         mCompositeDisposable.add(ApiUtils.getApiService(context).getUnitSummary(session.getRealm(), unitId)
                 .subscribeOn(Schedulers.io())
-                .doOnSuccess(response -> mStorage.insertUnitSummary(response, session))
+                .doOnSuccess(response -> mStorage.insertUnitSummary(session.getRealm(), session.getCompanyId(), response))
                 .onErrorReturn(throwable ->
                         ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass()) ?
-                                mStorage.getUnitSummary(unitId, session) :
+                                mStorage.getUnitSummary(session.getRealm(), unitId) :
                                 null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> mView.showLoading())

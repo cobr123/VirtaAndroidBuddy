@@ -10,6 +10,9 @@
     <string name="logout">Sign out</string>
     <string name="error_please_try_again">Something went wrong. Please try again.</string>
     <string name="unitlist_title">Subdivisions</string>
+    <string name="filter">Filter</string>
+    <string name="show_filtered_unitlist_button_title">Subdivisions found: %1$d</string>
+    <string name="subdivisions_filter">Subdivisions filter</string>
     <string name="knowledge_title">Skills</string>
     <string name="knowledge_management_title">Management</string>
     <string name="knowledge_advert_title">Marketing (advertising)</string>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.virtaandroidbuddy">
+    package="com.virtaandroidbuddy" android:installLocation="preferExternal">
 
-    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.unit.UnitMainActivity"/>
+            android:name=".ui.unitlist.filter.UnitListFilterActivity"
+            android:label="@string/subdivisions_filter"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".ui.unit.UnitMainActivity" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
