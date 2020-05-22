@@ -15,6 +15,7 @@ import com.virtaandroidbuddy.data.database.model.Region;
 import com.virtaandroidbuddy.data.database.model.Session;
 import com.virtaandroidbuddy.data.database.model.Unit;
 import com.virtaandroidbuddy.data.database.model.UnitClassKind;
+import com.virtaandroidbuddy.data.database.model.UnitListFilter;
 import com.virtaandroidbuddy.data.database.model.UnitSummary;
 
 import java.util.List;
@@ -110,4 +111,13 @@ public interface VirtonomicaDao {
 
     @Query("delete from city where realm = :realm")
     void deleteAllCities(String realm);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertUnitListFilter(UnitListFilter unitListFilter);
+
+    @Query("select * from unitlistfilter where realm = :realm and company_id = :companyId")
+    UnitListFilter getUnitListFilter(String realm, String companyId);
+
+    @Delete
+    void deleteUnitListFilter(UnitListFilter unitListFilter);
 }

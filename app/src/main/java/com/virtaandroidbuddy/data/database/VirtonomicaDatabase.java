@@ -11,6 +11,7 @@ import com.virtaandroidbuddy.data.database.model.Region;
 import com.virtaandroidbuddy.data.database.model.Session;
 import com.virtaandroidbuddy.data.database.model.Unit;
 import com.virtaandroidbuddy.data.database.model.UnitClassKind;
+import com.virtaandroidbuddy.data.database.model.UnitListFilter;
 import com.virtaandroidbuddy.data.database.model.UnitSummary;
 
 @Database(
@@ -23,8 +24,9 @@ import com.virtaandroidbuddy.data.database.model.UnitSummary;
                 Country.class,
                 Region.class,
                 City.class,
-                UnitClassKind.class},
-        version = 1)
+                UnitClassKind.class,
+                UnitListFilter.class},
+        version = 2)
 public abstract class VirtonomicaDatabase extends RoomDatabase {
     public abstract VirtonomicaDao getVirtonomicaDao();
 }

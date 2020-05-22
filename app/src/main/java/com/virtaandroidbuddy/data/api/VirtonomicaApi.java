@@ -31,7 +31,11 @@ public interface VirtonomicaApi {
     Single<CompanyJson> getCompanyInfo(@Path("realm") String realm);
 
     @GET("api/{realm}/my/company/units")
-    Single<UnitListJson> getUnitList(@Path("realm") String realm, @Query("id") String company_id);
+    Single<UnitListJson> getUnitList(@Path("realm") String realm,
+                                     @Query("id") String company_id,
+                                     @Query("country_id") String country_id,
+                                     @Query("region_id") String region_id,
+                                     @Query("city_id") String city_id);
 
     @GET("api/{realm}/my/unit/summary")
     Single<UnitSummaryJson> getUnitSummary(@Path("realm") String realm, @Query("id") String unit_id);

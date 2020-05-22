@@ -28,8 +28,8 @@ public class Session {
     }
 
     @Ignore
-    public Session(int id, String realm, String companyId, String companyName, String userId) {
-        this.mId = id;
+    public Session(String realm, String companyId, String companyName, String userId) {
+        this.mId = 1;
         this.mRealm = realm;
         this.mCompanyId = companyId;
         this.mCompanyName = companyName;

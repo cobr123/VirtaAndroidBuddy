@@ -35,4 +35,7 @@
     <string name="nav_header_subtitle">Realm name</string>
     <string name="unit_summary_title">Summary</string>
     <string name="unit_finans_report_title">Financial report</string>
+    <string name="all_countries">All countries</string>
+    <string name="all_regions">All regions</string>
+    <string name="all_cities">All cities</string>
 </resources>

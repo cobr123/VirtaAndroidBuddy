@@ -6,6 +6,7 @@ import com.virtaandroidbuddy.common.BasePresenter;
 import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
 import com.virtaandroidbuddy.data.database.model.Session;
+import com.virtaandroidbuddy.data.database.model.UnitListFilter;
 import com.virtaandroidbuddy.utils.ApiUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,13 +25,14 @@ public class UnitListPresenter extends BasePresenter {
 
     public void getUnitlist(Context context) {
         final Session session = mStorage.getSession();
+        final UnitListFilter unitListFilter = mStorage.getUnitListFilter(session);
 
-        mCompositeDisposable.add(ApiUtils.getApiService(context).getUnitList(session.getRealm(), session.getCompanyId())
+        mCompositeDisposable.add(ApiUtils.getApiService(context).getUnitList(session.getRealm(), session.getCompanyId(), unitListFilter.getCountryId(), unitListFilter.getRegionId(), unitListFilter.getCityId())
                 .subscribeOn(Schedulers.io())
                 .doOnSuccess(response -> mStorage.insertUnits(session.getRealm(), session.getCompanyId(), response))
                 .onErrorReturn(throwable -> {
                     if (ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())) {
-                        return mStorage.getUnitList(session.getRealm(), session.getCompanyId());
+                        return mStorage.getUnitList(session.getRealm(), session.getCompanyId(), unitListFilter);
                     } else {
                         throw new Exception(throwable);
                     }

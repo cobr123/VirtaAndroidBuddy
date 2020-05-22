@@ -13,24 +13,23 @@ import com.virtaandroidbuddy.data.database.model.Knowledge;
 import com.virtaandroidbuddy.data.database.model.Region;
 import com.virtaandroidbuddy.data.database.model.Session;
 import com.virtaandroidbuddy.data.database.model.Unit;
+import com.virtaandroidbuddy.data.database.model.UnitListFilter;
 import com.virtaandroidbuddy.data.database.model.UnitSummary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 
 public class Storage {
+
+    private static final String TAG = Storage.class.getSimpleName();
 
     private VirtonomicaDao mVirtonomicaDao;
 
     public Storage(VirtonomicaDao virtonomicaDao) {
         mVirtonomicaDao = virtonomicaDao;
-    }
-
-    public void insertSession(Session session) {
-        mVirtonomicaDao.insertSession(session);
     }
 
     public void insertUnits(String realm, String companyId, UnitListJson unitListJson) {
@@ -50,8 +49,13 @@ public class Storage {
         mVirtonomicaDao.insertUnits(unitList);
     }
 
-    public UnitListJson getUnitList(String realm, String companyId) {
-        final List<Unit> unitList = mVirtonomicaDao.getUnitList(realm, companyId);
+    public UnitListJson getUnitList(String realm, String companyId, UnitListFilter unitListFilter) {
+        final List<Unit> unitList = mVirtonomicaDao.getUnitList(realm, companyId)
+                .stream()
+                .filter(u -> unitListFilter.getCountryId().equals("0") || unitListFilter.getCountryId().equals(u.getCountryId()))
+                .filter(u -> unitListFilter.getRegionId().equals("0") || unitListFilter.getRegionId().equals(u.getRegionId()))
+                .filter(u -> unitListFilter.getCityId().equals("0") || unitListFilter.getCityId().equals(u.getCityId()))
+                .collect(Collectors.toList());
         final List<UnitListDataJson> data = new ArrayList<>(unitList.size());
         for (Unit unit : unitList) {
             final UnitListDataJson dataItem = new UnitListDataJson();
@@ -71,12 +75,29 @@ public class Storage {
         return unitListJson;
     }
 
+    public void insertSession(Session session) {
+        mVirtonomicaDao.insertSession(session);
+    }
+
     public void deleteSession(Session session) {
         mVirtonomicaDao.deleteSession(session);
     }
 
     public Session getSession() {
         return mVirtonomicaDao.getSession();
+    }
+
+
+    public void insertUnitListFilter(UnitListFilter unitListFilter) {
+        mVirtonomicaDao.insertUnitListFilter(unitListFilter);
+    }
+    public UnitListFilter getUnitListFilter(final Session session) {
+        final UnitListFilter unitListFilter = mVirtonomicaDao.getUnitListFilter(session.getRealm(), session.getCompanyId());
+        if (unitListFilter == null) {
+            return new UnitListFilter(session.getRealm(), session.getCompanyId());
+        } else {
+            return unitListFilter;
+        }
     }
 
     public void insertUnitSummary(String realm, String companyId, UnitSummaryJson unitSummaryJson) {

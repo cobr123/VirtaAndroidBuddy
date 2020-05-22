@@ -36,4 +36,7 @@
     <string name="nav_header_subtitle">Наименование реалма</string>
     <string name="unit_summary_title">Обзор</string>
     <string name="unit_finans_report_title">Финансовый отчёт</string>
+    <string name="all_countries">Все страны</string>
+    <string name="all_regions">Все регионы</string>
+    <string name="all_cities">Все города</string>
 </resources>
