@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.virtaandroidbuddy.AppDelegate;
 import com.virtaandroidbuddy.R;
 import com.virtaandroidbuddy.data.Storage;
+import com.virtaandroidbuddy.data.api.model.UnitListJson;
 import com.virtaandroidbuddy.data.database.model.City;
 import com.virtaandroidbuddy.data.database.model.Country;
 import com.virtaandroidbuddy.data.database.model.Region;
@@ -64,7 +65,7 @@ public class UnitListFilterActivity extends AppCompatActivity {
         final Session session = mStorage.getSession();
 
         mShowFilteredUnitlistBtn = findViewById(R.id.show_filtered_unitlist_button);
-        mShowFilteredUnitlistBtn.setText(getString(R.string.show_filtered_unitlist_button_title, 0));
+        mShowFilteredUnitlistBtn.setText(getString(R.string.show_filtered_unitlist_button_title, "0"));
         mShowFilteredUnitlistBtn.setOnClickListener(v -> finish());
 
         mCountrySp = findViewById(R.id.sp_country);
@@ -140,6 +141,7 @@ public class UnitListFilterActivity extends AppCompatActivity {
 
                 mStorage.insertUnitListFilter(unitListFilter);
                 Log.d(TAG, "mCountrySp position = " + position + ", id = " + id + ", unitListFilter = " + unitListFilter);
+                updateFinishButtonText(session, unitListFilter);
             }
 
             @Override
@@ -202,6 +204,7 @@ public class UnitListFilterActivity extends AppCompatActivity {
 
                 mStorage.insertUnitListFilter(unitListFilter);
                 Log.d(TAG, "mRegionSp position = " + position + ", id = " + id + ", unitListFilter = " + unitListFilter);
+                updateFinishButtonText(session, unitListFilter);
             }
 
             @Override
@@ -234,6 +237,7 @@ public class UnitListFilterActivity extends AppCompatActivity {
                 }
                 mStorage.insertUnitListFilter(unitListFilter);
                 Log.d(TAG, "mCitySp position = " + position + ", id = " + id + ", unitListFilter = " + unitListFilter);
+                updateFinishButtonText(session, unitListFilter);
             }
 
             @Override
@@ -335,6 +339,26 @@ public class UnitListFilterActivity extends AppCompatActivity {
                                 }
                             }
                         },
+                        this::showError));
+
+        updateFinishButtonText(session, unitListFilter);
+    }
+
+    private void updateFinishButtonText(final Session session, final UnitListFilter unitListFilter) {
+        mShowFilteredUnitlistBtn.setText(getString(R.string.show_filtered_unitlist_button_title, "..."));
+
+        mCompositeDisposable.add(ApiUtils.getApiService(getApplicationContext()).getUnitList(session.getRealm(), session.getCompanyId(), unitListFilter.getGeo())
+                .subscribeOn(Schedulers.io())
+                .onErrorReturn(throwable -> {
+                    if (ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())) {
+                        return mStorage.getUnitList(session.getRealm(), session.getCompanyId(), unitListFilter);
+                    } else {
+                        showError(throwable);
+                        return new UnitListJson();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(unitListJson -> mShowFilteredUnitlistBtn.setText(getString(R.string.show_filtered_unitlist_button_title, String.valueOf(unitListJson.getData().size()))),
                         this::showError));
     }
 
