@@ -58,6 +58,8 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
 
     implementation "android.arch.lifecycle:reactivestreams:1.1.1"
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }
 repositories {
     mavenCentral()

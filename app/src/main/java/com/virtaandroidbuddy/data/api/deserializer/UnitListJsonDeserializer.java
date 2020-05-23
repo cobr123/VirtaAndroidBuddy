@@ -34,10 +34,20 @@ public class UnitListJsonDeserializer implements JsonDeserializer<UnitListJson> 
             dataItem.setId(item.get("id").getAsString());
             dataItem.setName(item.get("name").getAsString());
             dataItem.setUnitClassName(item.get("unit_class_name").getAsString());
+            dataItem.setUnitTypeSymbol(item.get("unit_type_symbol").getAsString());
+            if (item.get("productivity") == null) {
+                dataItem.setUnitProductivity(0.0);
+            } else {
+                dataItem.setUnitProductivity(Double.parseDouble(item.get("productivity").getAsString()) * 100.0);
+            }
 
             dataItem.setCityId(item.get("city_id").getAsString());
+            dataItem.setCityName(item.get("city_name").getAsString());
             dataItem.setRegionId(item.get("region_id").getAsString());
+            dataItem.setRegionName(item.get("region_name").getAsString());
             dataItem.setCountryId(item.get("country_id").getAsString());
+
+            dataItem.setCountrySymbol(item.get("country_symbol").getAsString());
 
             dataList.add(dataItem);
         }

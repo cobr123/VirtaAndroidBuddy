@@ -10,6 +10,7 @@ public class UnitListDataJson implements Serializable {
     private String mUnitTypeSymbol;
     private String mUnitTypeName;
     private String mUnitClassName;
+    private double mUnitProductivity;
     private String mCountryId;
     private String mCountrySymbol;
     private String mCountryName;
@@ -40,6 +41,18 @@ public class UnitListDataJson implements Serializable {
 
     public void setUnitClassName(String unitClassName) {
         mUnitClassName = unitClassName;
+    }
+
+    public String getUnitProductivityString() {
+        return String.format("%.0f", mUnitProductivity);
+    }
+
+    public double getUnitProductivity() {
+        return mUnitProductivity;
+    }
+
+    public void setUnitProductivity(double unitProductivity) {
+        mUnitProductivity = unitProductivity;
     }
 
     public String getUnitTypeId() {
