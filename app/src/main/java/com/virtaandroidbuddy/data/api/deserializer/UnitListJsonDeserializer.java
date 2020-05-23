@@ -20,38 +20,40 @@ public class UnitListJsonDeserializer implements JsonDeserializer<UnitListJson> 
         final UnitListJson unitListJson = new UnitListJson();
         final JsonObject jsonObject = json.getAsJsonObject();
         final JsonObject info = jsonObject.get("info").getAsJsonObject();
-        final JsonObject data = jsonObject.get("data").getAsJsonObject();
 
         unitListJson.setCount(info.get("count").getAsLong());
         unitListJson.setPage(info.get("page").getAsLong());
         unitListJson.setPageSize(info.get("page_size").getAsLong());
 
-        final List<UnitListDataJson> dataList = new ArrayList<>(data.size());
-        for (Map.Entry<String, JsonElement> entry : data.entrySet()) {
-            final JsonObject item = (JsonObject) entry.getValue();
-            final UnitListDataJson dataItem = new UnitListDataJson();
+        if (jsonObject.get("data").isJsonObject()) {
+            final JsonObject data = jsonObject.get("data").getAsJsonObject();
+            final List<UnitListDataJson> dataList = new ArrayList<>(data.size());
+            for (Map.Entry<String, JsonElement> entry : data.entrySet()) {
+                final JsonObject item = (JsonObject) entry.getValue();
+                final UnitListDataJson dataItem = new UnitListDataJson();
 
-            dataItem.setId(item.get("id").getAsString());
-            dataItem.setName(item.get("name").getAsString());
-            dataItem.setUnitClassName(item.get("unit_class_name").getAsString());
-            dataItem.setUnitTypeSymbol(item.get("unit_type_symbol").getAsString());
-            if (item.get("productivity") == null) {
-                dataItem.setUnitProductivity(0.0);
-            } else {
-                dataItem.setUnitProductivity(Double.parseDouble(item.get("productivity").getAsString()) * 100.0);
+                dataItem.setId(item.get("id").getAsString());
+                dataItem.setName(item.get("name").getAsString());
+                dataItem.setUnitClassName(item.get("unit_class_name").getAsString());
+                dataItem.setUnitTypeSymbol(item.get("unit_type_symbol").getAsString());
+                if (item.get("productivity") == null) {
+                    dataItem.setUnitProductivity(0.0);
+                } else {
+                    dataItem.setUnitProductivity(Double.parseDouble(item.get("productivity").getAsString()) * 100.0);
+                }
+
+                dataItem.setCityId(item.get("city_id").getAsString());
+                dataItem.setCityName(item.get("city_name").getAsString());
+                dataItem.setRegionId(item.get("region_id").getAsString());
+                dataItem.setRegionName(item.get("region_name").getAsString());
+                dataItem.setCountryId(item.get("country_id").getAsString());
+
+                dataItem.setCountrySymbol(item.get("country_symbol").getAsString());
+
+                dataList.add(dataItem);
             }
-
-            dataItem.setCityId(item.get("city_id").getAsString());
-            dataItem.setCityName(item.get("city_name").getAsString());
-            dataItem.setRegionId(item.get("region_id").getAsString());
-            dataItem.setRegionName(item.get("region_name").getAsString());
-            dataItem.setCountryId(item.get("country_id").getAsString());
-
-            dataItem.setCountrySymbol(item.get("country_symbol").getAsString());
-
-            dataList.add(dataItem);
+            unitListJson.setData(dataList);
         }
-        unitListJson.setData(dataList);
         return unitListJson;
     }
 }

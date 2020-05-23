@@ -2,6 +2,7 @@ package com.virtaandroidbuddy.data.api.model;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UnitListJson implements Serializable {
@@ -45,7 +46,11 @@ public class UnitListJson implements Serializable {
     }
 
     public List<UnitListDataJson> getData() {
-        return mData;
+        if (mData == null) {
+            return new ArrayList<>();
+        } else {
+            return mData;
+        }
     }
 
     public void setData(List<UnitListDataJson> data) {

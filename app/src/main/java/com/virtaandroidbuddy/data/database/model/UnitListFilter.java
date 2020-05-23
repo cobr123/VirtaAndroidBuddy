@@ -79,6 +79,18 @@ public class UnitListFilter {
         mCountryId = countryId;
     }
 
+    public String getGeo() {
+        if (getCityId().equals("0")) {
+            if (getRegionId().equals("0")) {
+                return getCountryId();
+            } else {
+                return getCountryId() + "/" + getRegionId();
+            }
+        } else {
+            return getCountryId() + "/" + getRegionId() + "/" + getCityId();
+        }
+    }
+
     @Override
     public String toString() {
         return "UnitListFilter{" +
