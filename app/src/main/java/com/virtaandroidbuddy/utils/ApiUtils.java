@@ -12,6 +12,7 @@ import com.virtaandroidbuddy.data.api.VirtonomicaApi;
 import com.virtaandroidbuddy.data.api.deserializer.CityJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.CompanyJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.CountryJsonDeserializer;
+import com.virtaandroidbuddy.data.api.deserializer.KnowledgeJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.RegionJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitListJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitSummaryJsonDeserializer;
@@ -23,6 +24,7 @@ import com.virtaandroidbuddy.data.api.model.UnitListJson;
 import com.virtaandroidbuddy.data.api.model.UnitSummaryJson;
 import com.virtaandroidbuddy.data.database.model.City;
 import com.virtaandroidbuddy.data.database.model.Country;
+import com.virtaandroidbuddy.data.database.model.Knowledge;
 import com.virtaandroidbuddy.data.database.model.Region;
 
 import java.net.ConnectException;
@@ -73,6 +75,8 @@ public class ApiUtils {
                     }.getType(), new RegionJsonDeserializer())
                     .registerTypeAdapter(new TypeToken<List<City>>() {
                     }.getType(), new CityJsonDeserializer())
+                    .registerTypeAdapter(new TypeToken<Knowledge>() {
+                    }.getType(), new KnowledgeJsonDeserializer())
                     .create();
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)

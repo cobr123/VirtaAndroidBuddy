@@ -34,9 +34,10 @@ public class KnowledgeViewModel extends ViewModel {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doFinally(mCompositeDisposable::clear)
-                        .subscribe(knowledgeResp -> {
+                        .subscribe(knowledge -> {
                                     try {
-                                        final Knowledge knowledge = Knowledge.parseKnowledge(session, knowledgeResp.string());
+                                        knowledge.setRealm(session.getRealm());
+                                        knowledge.setUserId(session.getUserId());
                                         storage.insertKnowledge(knowledge);
                                         mKnowledgeLiveData.setValue(knowledge);
                                     } catch (Throwable throwable) {

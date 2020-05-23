@@ -5,13 +5,13 @@ import com.virtaandroidbuddy.data.api.model.UnitListJson;
 import com.virtaandroidbuddy.data.api.model.UnitSummaryJson;
 import com.virtaandroidbuddy.data.database.model.City;
 import com.virtaandroidbuddy.data.database.model.Country;
+import com.virtaandroidbuddy.data.database.model.Knowledge;
 import com.virtaandroidbuddy.data.database.model.Region;
 
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import okhttp3.ResponseBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -40,8 +40,8 @@ public interface VirtonomicaApi {
     @GET("api/{realm}/my/unit/summary")
     Single<UnitSummaryJson> getUnitSummary(@Path("realm") String realm, @Query("id") String unit_id);
 
-    @GET("{realm}/main/user/privat/persondata/knowledge?old")
-    Single<ResponseBody> getKnowledge(@Path("realm") String realm);
+    @GET("api/{realm}/main/user/competences/browse")
+    Single<Knowledge> getKnowledge(@Path("realm") String realm);
 
     @GET("api/{realm}/main/geo/country/browse")
     Single<List<Country>> getCountryList(@Path("realm") String realm);
