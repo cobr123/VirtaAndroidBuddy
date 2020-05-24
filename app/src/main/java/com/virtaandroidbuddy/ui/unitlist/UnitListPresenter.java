@@ -27,7 +27,7 @@ public class UnitListPresenter extends BasePresenter {
         final Session session = mStorage.getSession();
         final UnitListFilter unitListFilter = mStorage.getUnitListFilter(session);
 
-        mCompositeDisposable.add(ApiUtils.getApiService(context).getUnitList(session.getRealm(), session.getCompanyId(), unitListFilter.getGeo())
+        mCompositeDisposable.add(ApiUtils.getApiService(context).getUnitList(session.getRealm(), session.getCompanyId(), unitListFilter.getGeo(), unitListFilter.getUnitClassId(), unitListFilter.getUnitTypeId())
                 .subscribeOn(Schedulers.io())
                 .doOnSuccess(response -> mStorage.insertUnits(session.getRealm(), session.getCompanyId(), response))
                 .onErrorReturn(throwable -> {

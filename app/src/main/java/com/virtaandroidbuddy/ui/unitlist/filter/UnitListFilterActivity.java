@@ -21,7 +21,9 @@ import com.virtaandroidbuddy.data.database.model.City;
 import com.virtaandroidbuddy.data.database.model.Country;
 import com.virtaandroidbuddy.data.database.model.Region;
 import com.virtaandroidbuddy.data.database.model.Session;
+import com.virtaandroidbuddy.data.database.model.UnitClass;
 import com.virtaandroidbuddy.data.database.model.UnitListFilter;
+import com.virtaandroidbuddy.data.database.model.UnitType;
 import com.virtaandroidbuddy.utils.ApiUtils;
 
 import java.util.ArrayList;
@@ -40,22 +42,29 @@ public class UnitListFilterActivity extends AppCompatActivity {
     private Storage mStorage;
 
     private Button mShowFilteredUnitlistBtn;
+    private Spinner mUnitClassSp;
+    private Spinner mUnitTypeSp;
     private Spinner mCountrySp;
     private Spinner mRegionSp;
     private Spinner mCitySp;
+    private boolean mUnitClassSpTouched = false;
+    private boolean mUnitTypeSpTouched = false;
     private boolean mCountrySpTouched = false;
     private boolean mRegionSpTouched = false;
     private boolean mCitySpTouched = false;
+    private ArrayAdapter<UnitClass> mUnitClassAdapter;
+    private ArrayAdapter<UnitType> mUnitTypeAdapter;
     private ArrayAdapter<Country> mCountryAdapter;
     private ArrayAdapter<Region> mRegionAdapter;
     private ArrayAdapter<City> mCityAdapter;
     private final List<Region> mAllRegionList = new ArrayList<>();
     private final List<City> mAllCityList = new ArrayList<>();
+    private final List<UnitType> mAllUnitTypeList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
+        setContentView(R.layout.ac_unit_list_filter);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -68,6 +77,8 @@ public class UnitListFilterActivity extends AppCompatActivity {
         mShowFilteredUnitlistBtn.setText(getString(R.string.show_filtered_unitlist_button_title, "0"));
         mShowFilteredUnitlistBtn.setOnClickListener(v -> finish());
 
+        mUnitClassSp = findViewById(R.id.sp_unit_class);
+        mUnitTypeSp = findViewById(R.id.sp_unit_type);
         mCountrySp = findViewById(R.id.sp_country);
         mRegionSp = findViewById(R.id.sp_region);
         mCitySp = findViewById(R.id.sp_city);
@@ -245,6 +256,95 @@ public class UnitListFilterActivity extends AppCompatActivity {
 
             }
         });
+
+        mUnitClassAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
+        mUnitClassSp.setAdapter(mUnitClassAdapter);
+        mUnitClassSp.setOnTouchListener(new AdapterView.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mUnitClassSpTouched = true;
+                return false;
+            }
+        });
+        mUnitClassSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!mUnitClassSpTouched) return;
+
+                mUnitClassSpTouched = false;
+                final UnitListFilter unitListFilter = mStorage.getUnitListFilter(session);
+                mUnitTypeAdapter.clear();
+                if (position > 0) {
+                    final UnitClass unitClass = mUnitClassAdapter.getItem(position);
+                    unitListFilter.setUnitClassId(unitClass.getId());
+                    mUnitTypeAdapter.addAll(mAllUnitTypeList.stream()
+                            .filter(r -> r.getUnitClassId().equals(unitClass.getId()))
+                            .collect(Collectors.toList()));
+                } else {
+                    unitListFilter.setUnitClassId("0");
+                    mUnitTypeAdapter.addAll(mAllUnitTypeList);
+                }
+                mUnitTypeAdapter.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+                mUnitTypeAdapter.insert((new UnitType(getString(R.string.all_unit_types))), 0);
+                if (unitListFilter.getUnitTypeId().equals("0")) {
+                    mUnitTypeSp.setSelection(0, false);
+                } else {
+                    final Optional<UnitType> unitTypeOpt = mAllUnitTypeList.stream()
+                            .filter(c -> c.getId().equals(unitListFilter.getUnitTypeId()))
+                            .filter(r -> unitListFilter.getUnitClassId().equals("0") || r.getUnitClassId().equals(unitListFilter.getUnitClassId()))
+                            .findFirst();
+                    if (unitTypeOpt.isPresent()) {
+                        Log.d(TAG, "UnitType setter id = " + unitTypeOpt.get().getId() + ", name = " + unitTypeOpt.get().getName() + ", position = " + mUnitTypeAdapter.getPosition(unitTypeOpt.get()));
+                        mUnitTypeSp.setSelection(mUnitTypeAdapter.getPosition(unitTypeOpt.get()), false);
+                    } else {
+                        unitListFilter.setUnitTypeId("0");
+                        mUnitTypeSp.setSelection(0, false);
+                    }
+                }
+
+                mStorage.insertUnitListFilter(unitListFilter);
+                Log.d(TAG, "mUnitClassSp position = " + position + ", id = " + id + ", unitListFilter = " + unitListFilter);
+                updateFinishButtonText(session, unitListFilter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        mUnitTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
+        mUnitTypeSp.setAdapter(mUnitTypeAdapter);
+        mUnitTypeSp.setOnTouchListener(new AdapterView.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mUnitTypeSpTouched = true;
+                return false;
+            }
+        });
+        mUnitTypeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!mUnitTypeSpTouched) return;
+
+                mUnitTypeSpTouched = false;
+                final UnitListFilter unitListFilter = mStorage.getUnitListFilter(session);
+                if (position > 0) {
+                    final UnitType unitType = mUnitTypeAdapter.getItem(position);
+                    unitListFilter.setUnitTypeId(unitType.getId());
+                } else {
+                    unitListFilter.setUnitTypeId("0");
+                }
+                mStorage.insertUnitListFilter(unitListFilter);
+                Log.d(TAG, "mUnitTypeSp position = " + position + ", id = " + id + ", unitListFilter = " + unitListFilter);
+                updateFinishButtonText(session, unitListFilter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         final UnitListFilter unitListFilter = mStorage.getUnitListFilter(session);
 
         mCompositeDisposable.add(mStorage.getCountryList(session.getRealm())
@@ -341,13 +441,71 @@ public class UnitListFilterActivity extends AppCompatActivity {
                         },
                         this::showError));
 
+        mCompositeDisposable.add(mStorage.getUnitClassList(session.getRealm())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(unitClassList -> {
+                            if (unitClassList.isEmpty()) {
+                                mCompositeDisposable.add(ApiUtils.getApiService(this).getUnitClassList(session.getRealm())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(unitClassList2 -> mStorage.insertUnitClassList(session.getRealm(), unitClassList2),
+                                                this::showError));
+                            } else {
+
+                                mUnitClassAdapter.clear();
+                                mUnitClassAdapter.addAll(unitClassList);
+                                mUnitClassAdapter.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+                                mUnitClassAdapter.insert((new UnitClass(getString(R.string.all_unit_classes))), 0);
+
+                                final Optional<UnitClass> unitClassOpt = unitClassList.stream().filter(c -> c.getId().equals(unitListFilter.getUnitClassId())).findFirst();
+                                if (unitClassOpt.isPresent()) {
+                                    Log.d(TAG, "unitClassOpt id = " + unitClassOpt.get().getId() + ", name = " + unitClassOpt.get().getName() + ", position = " + mUnitClassAdapter.getPosition(unitClassOpt.get()));
+                                    mUnitClassSp.setSelection(mUnitClassAdapter.getPosition(unitClassOpt.get()), false);
+                                }
+                            }
+                        },
+                        this::showError));
+
+        mCompositeDisposable.add(mStorage.getUnitTypeList(session.getRealm())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(unitTypeList -> {
+                            if (unitTypeList.isEmpty()) {
+                                mCompositeDisposable.add(ApiUtils.getApiService(this).getUnitTypeList(session.getRealm())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(unitTypeList2 -> mStorage.insertUnitTypeList(session.getRealm(), unitTypeList2),
+                                                this::showError));
+                            } else {
+                                mAllUnitTypeList.clear();
+                                mAllUnitTypeList.addAll(unitTypeList);
+
+                                mUnitTypeAdapter.clear();
+                                if (!unitListFilter.getUnitClassId().equals("0")) {
+                                    mUnitTypeAdapter.addAll(mAllUnitTypeList.stream().filter(r -> r.getUnitClassId().equals(unitListFilter.getUnitClassId())).collect(Collectors.toList()));
+                                } else {
+                                    mUnitTypeAdapter.addAll(mAllUnitTypeList);
+                                }
+                                mUnitTypeAdapter.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+                                mUnitTypeAdapter.insert((new UnitType(getString(R.string.all_unit_types))), 0);
+
+                                final Optional<UnitType> unitTypeOpt = mAllUnitTypeList.stream().filter(c -> c.getId().equals(unitListFilter.getUnitTypeId())).findFirst();
+                                if (unitTypeOpt.isPresent()) {
+                                    Log.d(TAG, "unitTypeOpt id = " + unitTypeOpt.get().getId() + ", name = " + unitTypeOpt.get().getName() + ", position = " + mUnitTypeAdapter.getPosition(unitTypeOpt.get()));
+                                    mUnitTypeSp.setSelection(mUnitTypeAdapter.getPosition(unitTypeOpt.get()), false);
+                                }
+                            }
+                        },
+                        this::showError));
+
         updateFinishButtonText(session, unitListFilter);
     }
 
     private void updateFinishButtonText(final Session session, final UnitListFilter unitListFilter) {
         mShowFilteredUnitlistBtn.setText(getString(R.string.show_filtered_unitlist_button_title, "..."));
 
-        mCompositeDisposable.add(ApiUtils.getApiService(getApplicationContext()).getUnitList(session.getRealm(), session.getCompanyId(), unitListFilter.getGeo())
+        mCompositeDisposable.add(ApiUtils.getApiService(getApplicationContext()).getUnitList(session.getRealm(), session.getCompanyId(), unitListFilter.getGeo(), unitListFilter.getUnitClassId(), unitListFilter.getUnitTypeId())
                 .subscribeOn(Schedulers.io())
                 .onErrorReturn(throwable -> {
                     if (ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())) {

@@ -14,9 +14,11 @@ import com.virtaandroidbuddy.data.database.model.Knowledge;
 import com.virtaandroidbuddy.data.database.model.Region;
 import com.virtaandroidbuddy.data.database.model.Session;
 import com.virtaandroidbuddy.data.database.model.Unit;
+import com.virtaandroidbuddy.data.database.model.UnitClass;
 import com.virtaandroidbuddy.data.database.model.UnitClassKind;
 import com.virtaandroidbuddy.data.database.model.UnitListFilter;
 import com.virtaandroidbuddy.data.database.model.UnitSummary;
+import com.virtaandroidbuddy.data.database.model.UnitType;
 
 import java.util.List;
 
@@ -120,4 +122,22 @@ public interface VirtonomicaDao {
 
     @Delete
     void deleteUnitListFilter(UnitListFilter unitListFilter);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertUnitClassList(List<UnitClass> unitClassList);
+
+    @Query("select * from unitclass where realm = :realm")
+    Flowable<List<UnitClass>> getUnitClassList(String realm);
+
+    @Query("delete from unitclass where realm = :realm")
+    void deleteAllUnitClasses(String realm);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertUnitTypeList(List<UnitType> unitTypeList);
+
+    @Query("select * from unittype where realm = :realm")
+    Flowable<List<UnitType>> getUnitTypeList(String realm);
+
+    @Query("delete from unittype where realm = :realm")
+    void deleteAllUnitTypes(String realm);
 }

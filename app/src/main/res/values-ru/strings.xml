@@ -39,4 +39,6 @@
     <string name="all_countries">Все страны</string>
     <string name="all_regions">Все регионы</string>
     <string name="all_cities">Все города</string>
+    <string name="all_unit_classes">Все классы подразделений</string>
+    <string name="all_unit_types">Все типы подразделений</string>
 </resources>

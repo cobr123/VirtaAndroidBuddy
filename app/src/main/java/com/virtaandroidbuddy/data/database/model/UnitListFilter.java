@@ -24,6 +24,12 @@ public class UnitListFilter {
     @ColumnInfo(name = "country_id")
     private String mCountryId;
 
+    @ColumnInfo(name = "unit_class_id")
+    private String mUnitClassId;
+
+    @ColumnInfo(name = "unit_type_id")
+    private String mUnitTypeId;
+
     public UnitListFilter() {
     }
 
@@ -35,6 +41,8 @@ public class UnitListFilter {
         this.mCountryId = "0";
         this.mRegionId = "0";
         this.mCityId = "0";
+        this.mUnitClassId = "0";
+        this.mUnitTypeId = "0";
     }
 
     @NonNull
@@ -91,6 +99,22 @@ public class UnitListFilter {
         }
     }
 
+    public String getUnitClassId() {
+        return mUnitClassId;
+    }
+
+    public void setUnitClassId(String unitClassId) {
+        mUnitClassId = unitClassId;
+    }
+
+    public String getUnitTypeId() {
+        return mUnitTypeId;
+    }
+
+    public void setUnitTypeId(String unitTypeId) {
+        mUnitTypeId = unitTypeId;
+    }
+
     @Override
     public String toString() {
         return "UnitListFilter{" +
@@ -99,6 +123,8 @@ public class UnitListFilter {
                 ", mCityId='" + mCityId + '\'' +
                 ", mRegionId='" + mRegionId + '\'' +
                 ", mCountryId='" + mCountryId + '\'' +
+                ", mUnitClassId='" + mUnitClassId + '\'' +
+                ", mUnitTypeId='" + mUnitTypeId + '\'' +
                 '}';
     }
 }

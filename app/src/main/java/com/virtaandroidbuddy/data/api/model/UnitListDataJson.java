@@ -6,16 +6,22 @@ import java.io.Serializable;
 public class UnitListDataJson implements Serializable {
     private String mId;
     private String mName;
+    private double mUnitProductivity;
+
     private String mUnitTypeId;
     private String mUnitTypeSymbol;
     private String mUnitTypeName;
+
+    private String mUnitClassId;
     private String mUnitClassName;
-    private double mUnitProductivity;
+
     private String mCountryId;
     private String mCountrySymbol;
     private String mCountryName;
+
     private String mRegionId;
     private String mRegionName;
+
     private String mCityId;
     private String mCityName;
 
@@ -33,6 +39,14 @@ public class UnitListDataJson implements Serializable {
 
     public void setName(String mName) {
         this.mName = mName;
+    }
+
+    public String getUnitClassId() {
+        return mUnitClassId;
+    }
+
+    public void setUnitClassId(String unitClassId) {
+        mUnitClassId = unitClassId;
     }
 
     public String getUnitClassName() {

@@ -38,4 +38,6 @@
     <string name="all_countries">All countries</string>
     <string name="all_regions">All regions</string>
     <string name="all_cities">All cities</string>
+    <string name="all_unit_classes">All unit classes</string>
+    <string name="all_unit_types">All unit types</string>
 </resources>

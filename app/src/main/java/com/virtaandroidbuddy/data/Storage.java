@@ -13,8 +13,10 @@ import com.virtaandroidbuddy.data.database.model.Knowledge;
 import com.virtaandroidbuddy.data.database.model.Region;
 import com.virtaandroidbuddy.data.database.model.Session;
 import com.virtaandroidbuddy.data.database.model.Unit;
+import com.virtaandroidbuddy.data.database.model.UnitClass;
 import com.virtaandroidbuddy.data.database.model.UnitListFilter;
 import com.virtaandroidbuddy.data.database.model.UnitSummary;
+import com.virtaandroidbuddy.data.database.model.UnitType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +40,28 @@ public class Storage {
         for (UnitListDataJson item : data) {
             final Unit unit = new Unit();
             unit.setCompanyId(companyId);
-            unit.setId(item.getId());
             unit.setRealm(realm);
+
+            unit.setId(item.getId());
             unit.setName(item.getName());
+
+            unit.setUnitClassId(item.getUnitClassId());
+            unit.setUnitClassName(item.getUnitClassName());
+
+            unit.setUnitTypeId(item.getUnitTypeId());
+            unit.setUnitTypeName(item.getUnitTypeName());
+            unit.setUnitTypeSymbol(item.getUnitTypeSymbol());
+
             unit.setCityId(item.getCityId());
+            unit.setCityName(item.getCityName());
+
             unit.setRegionId(item.getRegionId());
+            unit.setRegionName(item.getRegionName());
+
             unit.setCountryId(item.getCountryId());
+            unit.setCountryName(item.getCountryName());
+            unit.setCountrySymbol(item.getCountrySymbol());
+
             unitList.add(unit);
         }
         mVirtonomicaDao.insertUnits(unitList);
@@ -55,6 +73,8 @@ public class Storage {
                 .filter(u -> unitListFilter.getCountryId().equals("0") || unitListFilter.getCountryId().equals(u.getCountryId()))
                 .filter(u -> unitListFilter.getRegionId().equals("0") || unitListFilter.getRegionId().equals(u.getRegionId()))
                 .filter(u -> unitListFilter.getCityId().equals("0") || unitListFilter.getCityId().equals(u.getCityId()))
+                .filter(u -> unitListFilter.getUnitClassId().equals("0") || unitListFilter.getUnitClassId().equals(u.getUnitClassId()))
+                .filter(u -> unitListFilter.getUnitTypeId().equals("0") || unitListFilter.getUnitTypeId().equals(u.getUnitTypeId()))
                 .collect(Collectors.toList());
         final List<UnitListDataJson> data = new ArrayList<>(unitList.size());
         for (Unit unit : unitList) {
@@ -62,11 +82,23 @@ public class Storage {
 
             dataItem.setId(unit.getId());
             dataItem.setName(unit.getName());
+
+            dataItem.setUnitClassId(unit.getUnitClassId());
             dataItem.setUnitClassName(unit.getUnitClassName());
 
+            dataItem.setUnitTypeId(unit.getUnitTypeId());
+            dataItem.setUnitTypeName(unit.getUnitTypeName());
+            dataItem.setUnitTypeSymbol(unit.getUnitTypeSymbol());
+
             dataItem.setCityId(unit.getCityId());
+            dataItem.setCityName(unit.getCityName());
+
             dataItem.setRegionId(unit.getRegionId());
+            dataItem.setRegionName(unit.getRegionName());
+
             dataItem.setCountryId(unit.getCountryId());
+            dataItem.setCountryName(unit.getCountryName());
+            dataItem.setCountrySymbol(unit.getCountrySymbol());
 
             data.add(dataItem);
         }
@@ -91,6 +123,7 @@ public class Storage {
     public void insertUnitListFilter(UnitListFilter unitListFilter) {
         mVirtonomicaDao.insertUnitListFilter(unitListFilter);
     }
+
     public UnitListFilter getUnitListFilter(final Session session) {
         final UnitListFilter unitListFilter = mVirtonomicaDao.getUnitListFilter(session.getRealm(), session.getCompanyId());
         if (unitListFilter == null) {
@@ -171,4 +204,29 @@ public class Storage {
     public Flowable<List<City>> getCityList(String realm) {
         return mVirtonomicaDao.getCityList(realm);
     }
+
+    public void insertUnitClassList(String realm, List<UnitClass> unitClassList) {
+        mVirtonomicaDao.deleteAllUnitClasses(realm);
+        for (UnitClass unitClass : unitClassList) {
+            unitClass.setRealm(realm);
+        }
+        mVirtonomicaDao.insertUnitClassList(unitClassList);
+    }
+
+    public Flowable<List<UnitClass>> getUnitClassList(String realm) {
+        return mVirtonomicaDao.getUnitClassList(realm);
+    }
+
+    public void insertUnitTypeList(String realm, List<UnitType> unitTypeList) {
+        mVirtonomicaDao.deleteAllUnitTypes(realm);
+        for (UnitType unitType : unitTypeList) {
+            unitType.setRealm(realm);
+        }
+        mVirtonomicaDao.insertUnitTypeList(unitTypeList);
+    }
+
+    public Flowable<List<UnitType>> getUnitTypeList(String realm) {
+        return mVirtonomicaDao.getUnitTypeList(realm);
+    }
+
 }

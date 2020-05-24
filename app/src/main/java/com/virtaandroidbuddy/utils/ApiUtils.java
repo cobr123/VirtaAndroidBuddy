@@ -14,8 +14,10 @@ import com.virtaandroidbuddy.data.api.deserializer.CompanyJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.CountryJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.KnowledgeJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.RegionJsonDeserializer;
+import com.virtaandroidbuddy.data.api.deserializer.UnitClassJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitListJsonDeserializer;
 import com.virtaandroidbuddy.data.api.deserializer.UnitSummaryJsonDeserializer;
+import com.virtaandroidbuddy.data.api.deserializer.UnitTypeJsonDeserializer;
 import com.virtaandroidbuddy.data.api.interceptor.AddCookiesInterceptor;
 import com.virtaandroidbuddy.data.api.interceptor.ResponseCodeInterceptor;
 import com.virtaandroidbuddy.data.api.interceptor.ReceivedCookiesInterceptor;
@@ -26,6 +28,8 @@ import com.virtaandroidbuddy.data.database.model.City;
 import com.virtaandroidbuddy.data.database.model.Country;
 import com.virtaandroidbuddy.data.database.model.Knowledge;
 import com.virtaandroidbuddy.data.database.model.Region;
+import com.virtaandroidbuddy.data.database.model.UnitClass;
+import com.virtaandroidbuddy.data.database.model.UnitType;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -77,6 +81,10 @@ public class ApiUtils {
                     }.getType(), new CityJsonDeserializer())
                     .registerTypeAdapter(new TypeToken<Knowledge>() {
                     }.getType(), new KnowledgeJsonDeserializer())
+                    .registerTypeAdapter(new TypeToken<List<UnitClass>>() {
+                    }.getType(), new UnitClassJsonDeserializer())
+                    .registerTypeAdapter(new TypeToken<List<UnitType>>() {
+                    }.getType(), new UnitTypeJsonDeserializer())
                     .create();
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)

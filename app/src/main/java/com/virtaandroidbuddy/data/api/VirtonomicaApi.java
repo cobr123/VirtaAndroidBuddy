@@ -7,6 +7,8 @@ import com.virtaandroidbuddy.data.database.model.City;
 import com.virtaandroidbuddy.data.database.model.Country;
 import com.virtaandroidbuddy.data.database.model.Knowledge;
 import com.virtaandroidbuddy.data.database.model.Region;
+import com.virtaandroidbuddy.data.database.model.UnitClass;
+import com.virtaandroidbuddy.data.database.model.UnitType;
 
 import java.util.List;
 
@@ -33,7 +35,9 @@ public interface VirtonomicaApi {
     @GET("api/{realm}/my/company/units")
     Single<UnitListJson> getUnitList(@Path("realm") String realm,
                                      @Query("id") String company_id,
-                                     @Query(value = "geo", encoded = true) String geo);
+                                     @Query(value = "geo", encoded = true) String geo,
+                                     @Query("unit_class_id") String unit_class_id,
+                                     @Query("unit_type_id") String unit_type_id);
 
     @GET("api/{realm}/my/unit/summary")
     Single<UnitSummaryJson> getUnitSummary(@Path("realm") String realm, @Query("id") String unit_id);
@@ -49,4 +53,10 @@ public interface VirtonomicaApi {
 
     @GET("api/{realm}/main/geo/city/browse")
     Single<List<City>> getCityList(@Path("realm") String realm);
+
+    @GET("api/{realm}/main/unitclass/browse")
+    Single<List<UnitClass>> getUnitClassList(@Path("realm") String realm);
+
+    @GET("api/{realm}/main/unittype/browse")
+    Single<List<UnitType>> getUnitTypeList(@Path("realm") String realm);
 }
