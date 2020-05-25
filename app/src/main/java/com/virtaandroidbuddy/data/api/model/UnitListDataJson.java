@@ -58,7 +58,11 @@ public class UnitListDataJson implements Serializable {
     }
 
     public String getUnitProductivityString() {
-        return String.format("%.0f", mUnitProductivity);
+        if (mUnitProductivity >= 0) {
+            return String.format("%.0f", mUnitProductivity);
+        } else {
+            return "?";
+        }
     }
 
     public double getUnitProductivity() {
