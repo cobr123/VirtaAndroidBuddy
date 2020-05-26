@@ -8,17 +8,28 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 import com.virtaandroidbuddy.data.database.model.Session;
+import com.virtaandroidbuddy.utils.ApiUtils;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -49,11 +60,26 @@ public class MainActivity extends AppCompatActivity {
         final View headerView = navigationView.getHeaderView(0);
         final TextView headerTitleTextView = headerView.findViewById(R.id.nav_header_title);
         final TextView headerSubtitleTextView = headerView.findViewById(R.id.nav_header_subtitle);
+        final ImageView headerAvatar = headerView.findViewById(R.id.iv_nav_header_avatar);
         final Session session = ((AppDelegate) getApplicationContext()).getStorage().getSession();
 
         if (session != null) {
             headerTitleTextView.setText(session.getCompanyName());
             headerSubtitleTextView.setText(session.getRealm());
+
+            final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+            mCompositeDisposable.add(ApiUtils.getApiService(this).getUserAvatarUrl(session.getRealm(), session.getUserId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(avatarUrl -> {
+                                Picasso.get().load(avatarUrl).into(headerAvatar);
+                                mCompositeDisposable.clear();
+                            },
+                            throwable -> {
+                                Log.e(TAG, throwable.getLocalizedMessage());
+                                Toast.makeText(this, throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                mCompositeDisposable.clear();
+                            }));
         }
     }
 

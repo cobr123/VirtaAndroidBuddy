@@ -59,4 +59,7 @@ public interface VirtonomicaApi {
 
     @GET("api/{realm}/main/unittype/browse")
     Single<List<UnitType>> getUnitTypeList(@Path("realm") String realm);
+
+    @GET("api/{realm}/main/user/avatar/get")
+    Single<String> getUserAvatarUrl(@Path("realm") String realm, @Query("user_id") String userId);
 }
