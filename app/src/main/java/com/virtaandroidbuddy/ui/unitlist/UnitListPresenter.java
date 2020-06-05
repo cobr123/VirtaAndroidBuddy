@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.virtaandroidbuddy.common.BasePresenter;
 import com.virtaandroidbuddy.data.Storage;
+import com.virtaandroidbuddy.data.api.SessionExpiredException;
 import com.virtaandroidbuddy.data.api.model.UnitListDataJson;
 import com.virtaandroidbuddy.data.database.model.Session;
 import com.virtaandroidbuddy.data.database.model.UnitListFilter;
@@ -29,7 +30,12 @@ public class UnitListPresenter extends BasePresenter {
 
         mCompositeDisposable.add(ApiUtils.getApiService(context).getUnitList(session.getRealm(), session.getCompanyId(), unitListFilter.getGeo(), unitListFilter.getUnitClassId(), unitListFilter.getUnitTypeId())
                 .subscribeOn(Schedulers.io())
-                .doOnSuccess(response -> mStorage.insertUnits(session.getRealm(), session.getCompanyId(), response))
+                .doOnSuccess(response -> {
+                    if (!response.getData().isEmpty() && response.getData().get(0).getUnitProductivity() == -1) {
+                        throw new SessionExpiredException();
+                    }
+                    mStorage.insertUnits(session.getRealm(), session.getCompanyId(), response);
+                })
                 .onErrorReturn(throwable -> {
                     if (ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())) {
                         return mStorage.getUnitList(session.getRealm(), session.getCompanyId(), unitListFilter);
