@@ -25,6 +25,8 @@ public class UnitListDataJson implements Serializable {
     private String mCityId;
     private String mCityName;
 
+    private boolean mWorkersInHoliday;
+
     public String getId() {
         return mId;
     }
@@ -151,5 +153,13 @@ public class UnitListDataJson implements Serializable {
 
     public void setCityName(String cityName) {
         mCityName = cityName;
+    }
+
+    public boolean isWorkersInHoliday() {
+        return mWorkersInHoliday;
+    }
+
+    public void setWorkersInHoliday(boolean isWorkersInHoliday) {
+        mWorkersInHoliday = isWorkersInHoliday;
     }
 }

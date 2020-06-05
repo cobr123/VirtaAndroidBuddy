@@ -22,6 +22,7 @@ public class UnitListHolder extends RecyclerView.ViewHolder {
     private TextView mUnitId;
     private TextView mUnitName;
     private TextView mUnitEff;
+    private ImageView mUnitWorkersInHoliday;
     private ImageView mUnitTypeSymbol;
 
     public UnitListHolder(@NonNull View itemView) {
@@ -34,6 +35,7 @@ public class UnitListHolder extends RecyclerView.ViewHolder {
         mUnitId = itemView.findViewById(R.id.tv_unit_id);
         mUnitName = itemView.findViewById(R.id.tv_unit_name);
         mUnitEff = itemView.findViewById(R.id.tv_unit_eff);
+        mUnitWorkersInHoliday = itemView.findViewById(R.id.iv_workers_in_holiday);
         mUnitTypeSymbol = itemView.findViewById(R.id.iv_unit_type_symbol);
     }
 
@@ -44,7 +46,15 @@ public class UnitListHolder extends RecyclerView.ViewHolder {
 
         mUnitId.setText(unit.getId());
         mUnitName.setText(unit.getName());
-        mUnitEff.setText(unit.getUnitProductivityString());
+        if (unit.isWorkersInHoliday()) {
+            mUnitEff.setVisibility(View.GONE);
+            mUnitWorkersInHoliday.setVisibility(View.VISIBLE);
+            Picasso.get().load(context.getString(R.string.base_url) + "img/unit_indicator/workers_in_holiday.gif").into(mUnitWorkersInHoliday);
+        } else {
+            mUnitWorkersInHoliday.setVisibility(View.GONE);
+            mUnitEff.setVisibility(View.VISIBLE);
+            mUnitEff.setText(unit.getUnitProductivityString());
+        }
         Picasso.get().load(context.getString(R.string.base_url) + "img/unit_types/" + unit.getUnitTypeSymbol() + ".gif").into(mUnitTypeSymbol);
 
         if (onItemClickListener != null) {

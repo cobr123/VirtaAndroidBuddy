@@ -62,6 +62,8 @@ public class Storage {
             unit.setCountryName(item.getCountryName());
             unit.setCountrySymbol(item.getCountrySymbol());
 
+            unit.setWorkersInHoliday(item.isWorkersInHoliday());
+
             unitList.add(unit);
         }
         mVirtonomicaDao.insertUnits(unitList);
@@ -99,6 +101,8 @@ public class Storage {
             dataItem.setCountryId(unit.getCountryId());
             dataItem.setCountryName(unit.getCountryName());
             dataItem.setCountrySymbol(unit.getCountrySymbol());
+
+            dataItem.setWorkersInHoliday(unit.isWorkersInHoliday());
 
             data.add(dataItem);
         }

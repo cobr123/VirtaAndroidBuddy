@@ -52,6 +52,9 @@ public class Unit {
     @ColumnInfo(name = "unit_type_name")
     private String mUnitTypeName;
 
+    @ColumnInfo(name = "workers_in_holiday")
+    private boolean mWorkersInHoliday;
+
     @NonNull
     public String getRealm() {
         return mRealm;
@@ -188,5 +191,13 @@ public class Unit {
 
     public void setUnitTypeName(String unitTypeName) {
         mUnitTypeName = unitTypeName;
+    }
+
+    public boolean isWorkersInHoliday() {
+        return mWorkersInHoliday;
+    }
+
+    public void setWorkersInHoliday(boolean isWorkersInHoliday) {
+        mWorkersInHoliday = isWorkersInHoliday;
     }
 }
