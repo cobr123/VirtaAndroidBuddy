@@ -169,6 +169,7 @@ public class UnitListFragment extends PresenterFragment<UnitListPresenter> imple
         final Intent intent = new Intent(getActivity(), UnitMainActivity.class);
         intent.putExtra(UnitSummaryFragment.UNIT_ID_KEY, unitListDataJson.getId());
         intent.putExtra(UnitSummaryFragment.UNIT_CLASS_NAME_KEY, unitListDataJson.getUnitClassName());
+        intent.putExtra(UnitSummaryFragment.UNIT_CLASS_KIND_KEY, unitListDataJson.getUnitClassKind());
         startActivity(intent);
     }
 

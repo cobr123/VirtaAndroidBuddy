@@ -50,6 +50,7 @@ public class Storage {
 
             unit.setUnitClassId(item.getUnitClassId());
             unit.setUnitClassName(item.getUnitClassName());
+            unit.setUnitClassKind(item.getUnitClassKind());
 
             unit.setUnitTypeId(item.getUnitTypeId());
             unit.setUnitTypeName(item.getUnitTypeName());
@@ -90,6 +91,7 @@ public class Storage {
 
             dataItem.setUnitClassId(unit.getUnitClassId());
             dataItem.setUnitClassName(unit.getUnitClassName());
+            dataItem.setUnitClassKind(unit.getUnitClassKind());
 
             dataItem.setUnitTypeId(unit.getUnitTypeId());
             dataItem.setUnitTypeName(unit.getUnitTypeName());

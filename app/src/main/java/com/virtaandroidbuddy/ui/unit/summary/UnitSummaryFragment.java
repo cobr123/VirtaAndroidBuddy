@@ -18,6 +18,7 @@ import com.virtaandroidbuddy.common.PresenterFragment;
 import com.virtaandroidbuddy.common.Refreshable;
 import com.virtaandroidbuddy.data.Storage;
 import com.virtaandroidbuddy.data.api.GameUpdateHappeningNowException;
+import com.virtaandroidbuddy.data.api.model.UnitClassKindEnum;
 import com.virtaandroidbuddy.data.api.model.UnitSummaryJson;
 import com.virtaandroidbuddy.ui.login.LoginActivity;
 import com.virtaandroidbuddy.ui.unit.UnitMainActivity;
@@ -28,10 +29,14 @@ public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter>
 
     public static final String UNIT_ID_KEY = "UNIT_ID_KEY";
     public static final String UNIT_CLASS_NAME_KEY = "UNIT_CLASS_NAME_KEY";
+    public static final String UNIT_CLASS_KIND_KEY = "UNIT_CLASS_KIND_KEY";
 
     private View mErrorView;
     private View mUnitSummaryView;
+    private View mWorkshopUnitSummaryView;
+    private View mShopUnitSummaryView;
     private String mUnitId;
+    private UnitClassKindEnum mUnitClassKind;
     private Storage mStorage;
     private UnitSummaryPresenter mPresenter;
 
@@ -60,9 +65,17 @@ public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter>
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mErrorView = view.findViewById(R.id.errorView);
         mUnitSummaryView = view.findViewById(R.id.view_unit_summary);
+        mWorkshopUnitSummaryView = view.findViewById(R.id.view_unit_summary_workshop);
+        mShopUnitSummaryView = view.findViewById(R.id.view_unit_summary_shop);
 
-        mUnitSummaryId = view.findViewById(R.id.tv_id);
-        mUnitSummaryName = view.findViewById(R.id.tv_name);
+        try {
+            mUnitClassKind = UnitClassKindEnum.valueOf(getActivity().getIntent().getStringExtra(UNIT_CLASS_KIND_KEY));
+        } catch (final Exception e) {
+            mUnitClassKind = UnitClassKindEnum.unknown;
+            Log.e(TAG, e.toString());
+        }
+        mUnitSummaryId = getUnitSummaryView().findViewById(R.id.tv_id);
+        mUnitSummaryName = getUnitSummaryView().findViewById(R.id.tv_name);
     }
 
     @Override
@@ -75,7 +88,6 @@ public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter>
         ((UnitMainActivity) getActivity()).getSupportActionBar().setTitle(unitClassName);
 
         mPresenter = new UnitSummaryPresenter(this, mStorage);
-        mUnitSummaryView.setVisibility(View.VISIBLE);
 
         onRefreshData();
     }
@@ -116,18 +128,28 @@ public class UnitSummaryFragment extends PresenterFragment<UnitSummaryPresenter>
 
     }
 
+    private View getUnitSummaryView() {
+        switch (mUnitClassKind) {
+            case workshop:
+                return mWorkshopUnitSummaryView;
+            case shop:
+                return mShopUnitSummaryView;
+            default:
+                return mUnitSummaryView;
+        }
+    }
 
     @Override
     public void showUnitSummary(UnitSummaryJson unitSummaryJson) {
         mErrorView.setVisibility(View.GONE);
-        mUnitSummaryView.setVisibility(View.VISIBLE);
+        getUnitSummaryView().setVisibility(View.VISIBLE);
         bind(unitSummaryJson);
     }
 
     @Override
     public void showError(Throwable throwable) {
         mErrorView.setVisibility(View.VISIBLE);
-        mUnitSummaryView.setVisibility(View.GONE);
+        getUnitSummaryView().setVisibility(View.GONE);
         Log.e(TAG, throwable.toString(), throwable);
         //showLoginWindow(throwable.toString());
         if (throwable instanceof GameUpdateHappeningNowException) {

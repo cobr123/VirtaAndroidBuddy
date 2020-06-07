@@ -51,6 +51,7 @@ public class UnitListJsonDeserializer implements JsonDeserializer<UnitListJson> 
                 dataItem.setName(item.get("name").getAsString());
                 dataItem.setUnitClassId(item.get("unit_class_id").getAsString());
                 dataItem.setUnitClassName(item.get("unit_class_name").getAsString());
+                dataItem.setUnitClassKind(item.get("unit_class_kind").getAsString());
                 dataItem.setUnitTypeId(item.get("unit_type_id").getAsString());
                 dataItem.setUnitTypeSymbol(item.get("unit_type_symbol").getAsString());
                 if (item.get("productivity") == null) {

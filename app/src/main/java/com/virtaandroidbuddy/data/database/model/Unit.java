@@ -44,6 +44,8 @@ public class Unit {
     private String mUnitClassId;
     @ColumnInfo(name = "unit_class_name")
     private String mUnitClassName;
+    @ColumnInfo(name = "unit_class_kind")
+    private String mUnitClassKind;
 
     @ColumnInfo(name = "unit_type_id")
     private String mUnitTypeId;
@@ -167,6 +169,14 @@ public class Unit {
 
     public void setUnitClassName(String unitClassName) {
         mUnitClassName = unitClassName;
+    }
+
+    public String getUnitClassKind() {
+        return mUnitClassKind;
+    }
+
+    public void setUnitClassKind(String unitClassKind) {
+        mUnitClassKind = unitClassKind;
     }
 
     public String getUnitTypeId() {

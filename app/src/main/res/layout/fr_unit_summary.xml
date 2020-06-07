@@ -9,6 +9,14 @@
         android:visibility="gone" />
 
     <include
+        layout="@layout/v_unit_summary_workshop"
+        android:visibility="gone" />
+
+    <include
+        layout="@layout/v_unit_summary_shop"
+        android:visibility="gone" />
+
+    <include
         layout="@layout/v_error"
         android:visibility="gone" />
 
