@@ -79,7 +79,7 @@ public class ApiUtils {
                     }.getType(), new RegionJsonDeserializer())
                     .registerTypeAdapter(new TypeToken<List<City>>() {
                     }.getType(), new CityJsonDeserializer())
-                    .registerTypeAdapter(new TypeToken<Knowledge>() {
+                    .registerTypeAdapter(new TypeToken<List<Knowledge>>() {
                     }.getType(), new KnowledgeJsonDeserializer())
                     .registerTypeAdapter(new TypeToken<List<UnitClass>>() {
                     }.getType(), new UnitClassJsonDeserializer())

@@ -24,6 +24,15 @@
                 tools:text="1+1" />
 
             <TextView
+                android:id="@+id/knowledge_management_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/knowledge_name_margin_start"
@@ -45,6 +54,15 @@
                 android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
                 android:gravity="end"
                 tools:text="1+1" />
+
+            <TextView
+                android:id="@+id/knowledge_advert_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -70,6 +88,15 @@
                 tools:text="1+1" />
 
             <TextView
+                android:id="@+id/knowledge_it_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/knowledge_name_margin_start"
@@ -91,6 +118,15 @@
                 android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
                 android:gravity="end"
                 tools:text="1+1" />
+
+            <TextView
+                android:id="@+id/knowledge_car_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -116,6 +152,15 @@
                 tools:text="1+1" />
 
             <TextView
+                android:id="@+id/knowledge_medicine_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/knowledge_name_margin_start"
@@ -137,6 +182,15 @@
                 android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
                 android:gravity="end"
                 tools:text="1+1" />
+
+            <TextView
+                android:id="@+id/knowledge_educational_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -162,6 +216,15 @@
                 tools:text="1000+1000" />
 
             <TextView
+                android:id="@+id/knowledge_restaurant_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="1.15% (+10.58%)" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/knowledge_name_margin_start"
@@ -183,6 +246,15 @@
                 android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
                 android:gravity="end"
                 tools:text="1+1" />
+
+            <TextView
+                android:id="@+id/knowledge_service_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -208,6 +280,15 @@
                 tools:text="1+1" />
 
             <TextView
+                android:id="@+id/knowledge_trade_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/knowledge_name_margin_start"
@@ -229,6 +310,15 @@
                 android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
                 android:gravity="end"
                 tools:text="1+1" />
+
+            <TextView
+                android:id="@+id/knowledge_mining_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="0.15% (+1.58%)" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -254,6 +344,15 @@
                 tools:text="1+1" />
 
             <TextView
+                android:id="@+id/knowledge_manufacture_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/knowledge_name_margin_start"
@@ -275,6 +374,15 @@
                 android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
                 android:gravity="end"
                 tools:text="1+1" />
+
+            <TextView
+                android:id="@+id/knowledge_power_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -300,6 +408,15 @@
                 tools:text="1+1" />
 
             <TextView
+                android:id="@+id/knowledge_animal_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/knowledge_name_margin_start"
@@ -321,6 +438,15 @@
                 android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
                 android:gravity="end"
                 tools:text="100+100" />
+
+            <TextView
+                android:id="@+id/knowledge_fishing_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -346,6 +472,15 @@
                 tools:text="100+1" />
 
             <TextView
+                android:id="@+id/knowledge_farming_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/knowledge_name_margin_start"
@@ -367,6 +502,15 @@
                 android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
                 android:gravity="end"
                 tools:text="1+10" />
+
+            <TextView
+                android:id="@+id/knowledge_research_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/knowledge_lvl_margin_start"
+                android:layout_marginTop="@dimen/knowledge_lvl_margin_top"
+                android:gravity="end"
+                tools:text="86.15% (+1.58%)" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -43,7 +43,7 @@ public interface VirtonomicaApi {
     Single<UnitSummaryJson> getUnitSummary(@Path("realm") String realm, @Query("id") String unit_id);
 
     @GET("api/{realm}/main/user/competences/browse")
-    Single<Knowledge> getKnowledge(@Path("realm") String realm);
+    Single<List<Knowledge>> getKnowledge(@Path("realm") String realm);
 
     @GET("api/{realm}/main/geo/country/browse")
     Single<List<Country>> getCountryList(@Path("realm") String realm);

@@ -10,6 +10,7 @@ import com.virtaandroidbuddy.data.database.VirtonomicaDao;
 import com.virtaandroidbuddy.data.database.model.City;
 import com.virtaandroidbuddy.data.database.model.Country;
 import com.virtaandroidbuddy.data.database.model.Knowledge;
+import com.virtaandroidbuddy.data.database.model.KnowledgeKind;
 import com.virtaandroidbuddy.data.database.model.Region;
 import com.virtaandroidbuddy.data.database.model.Session;
 import com.virtaandroidbuddy.data.database.model.Unit;
@@ -19,7 +20,9 @@ import com.virtaandroidbuddy.data.database.model.UnitSummary;
 import com.virtaandroidbuddy.data.database.model.UnitType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import io.reactivex.Flowable;
@@ -154,19 +157,31 @@ public class Storage {
         return unitSummaryJson;
     }
 
-    public LiveData<Knowledge> getKnowledge(String realm, String userId) {
-        final LiveData<Knowledge> knowledgeLiveData = mVirtonomicaDao.getKnowledge(realm, userId);
+    public LiveData<List<Knowledge>> getKnowledge(String realm, String userId) {
+        final LiveData<List<Knowledge>> knowledgeLiveData = mVirtonomicaDao.getKnowledge(realm, userId);
         if (knowledgeLiveData.getValue() == null) {
-            final MutableLiveData<Knowledge> emptyKnowledgeLiveData = new MutableLiveData<>();
-            emptyKnowledgeLiveData.setValue(new Knowledge());
+            final MutableLiveData<List<Knowledge>> emptyKnowledgeLiveData = new MutableLiveData<>();
+            emptyKnowledgeLiveData.setValue(new ArrayList<>());
             return emptyKnowledgeLiveData;
         } else {
             return knowledgeLiveData;
         }
     }
 
-    public void insertKnowledge(Knowledge knowledge) {
-        mVirtonomicaDao.insertKnowledge(knowledge);
+    public Map<KnowledgeKind, Knowledge> getKnowledgeMapFromList(final List<Knowledge> knowledgeList) {
+        final Map<KnowledgeKind, Knowledge> knowledgeMap = new HashMap<>();
+        for (Knowledge knowledge : knowledgeList) {
+            knowledgeMap.put(KnowledgeKind.valueOf(knowledge.getKind()), knowledge);
+        }
+        return knowledgeMap;
+    }
+
+    public void insertKnowledge(List<Knowledge> knowledgeList) {
+        mVirtonomicaDao.insertKnowledge(knowledgeList);
+    }
+
+    public void deleteKnowledge(String realm, String userId) {
+        mVirtonomicaDao.deleteKnowledge(realm, userId);
     }
 
     public interface StorageOwner {

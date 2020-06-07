@@ -64,10 +64,13 @@ public interface VirtonomicaDao {
     void deleteUnitSummary(UnitSummary unitSummary);
 
     @Query("select * from knowledge where realm = :realm and user_id = :userId")
-    LiveData<Knowledge> getKnowledge(String realm, String userId);
+    LiveData<List<Knowledge>> getKnowledge(String realm, String userId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertKnowledge(Knowledge knowledge);
+    void insertKnowledge(List<Knowledge> knowledgeList);
+
+    @Query("delete from knowledge where realm = :realm and user_id = :userId")
+    void deleteKnowledge(String realm, String userId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUnitClassKind(UnitClassKind unitClassKind);

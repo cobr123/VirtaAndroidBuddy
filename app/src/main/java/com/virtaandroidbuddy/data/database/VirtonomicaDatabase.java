@@ -31,7 +31,7 @@ import com.virtaandroidbuddy.data.database.model.UnitType;
                 UnitClass.class,
                 UnitType.class
         },
-        version = 4)
+        version = 5)
 public abstract class VirtonomicaDatabase extends RoomDatabase {
     public abstract VirtonomicaDao getVirtonomicaDao();
 }
